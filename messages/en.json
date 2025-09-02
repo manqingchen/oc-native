@@ -1,0 +1,262 @@
+{
+  "home": {
+    "title": "Moving  Asset OnChain",
+    "products": "Products",
+    "sub-title": "Empower billions of users with exceptional on-chain financial services",
+    "description": "OnChain has made global asset investment as simple, safe, and efficient as online shopping through three major innovations: “compliance architecture + smart contracts + layered liquidity”. Whether it is institutions doing cross-border allocation or individual investors wanting Risk Diversification, we can provide whole-link solutions.",
+    "description1": "OnChain has made global asset investment as simple, safe, and efficient as online",
+    "description2": "shopping through three major innovations: “compliance architecture + smart contracts + layered liquidity”. ",
+    "description3": "Whether it is institutions doing cross-border allocation or individual investors wanting Risk Diversification, we can provide whole-link solutions."
+  },
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "my-account": "My Account",
+    "onchainDocs": "Onchain Docs",
+    "my": "My",
+    "assets": "Assets",
+    "OnChanin_DOC": "OnChanin DOC",
+    "logout": "Logout",
+    "menu": "MENU",
+    "stay_connected": "Stay Connected"
+  },
+  "wallet": {
+    "solana": "solana",
+    "USDC": "USDC",
+    "connect-wallet": "Connect",
+    "continue-with": "Continue with",
+    "connecting": "connecting"
+  },
+  "button": {
+    "get-started": "Get Started",
+    "subscribe": "Subscribe",
+    "redeem": "Redeem",
+    "buy": "Buy",
+    "continue_to_subscribe": "Continue to subscribe",
+    "continue_to_redeem": "Continue to redeem"
+  },
+  "product": {
+    "underlying_assert": "Underlying asset",
+    "member_points":"OnChain points",
+    "x": "x",
+    "senior_loan_strategy": "Senior Loan Strategy",
+    "tvl": "TVL",
+    "apy": "APY",
+    "detail": {
+      "title": "Detail",
+      "overview": "Overview",
+      "activities": "Activities",
+      "summary": "Summary",
+      "about_lssuer": "About lssuer",
+      "whole_term_sheets": "Disclaimer",
+      "subscribe_amount": "Subscribe Amount",
+      "indicative_quantity": "Indicative Quantity",
+      "balance": "balance",
+      "bal": "bal",
+      "USDT": "USDT",
+      "USDC": "USDC",
+      "redeem_amount": "Redeem Amount",
+      "transaction_info": "Transaction info",
+      "AUM": "AUM",
+      "min_subscription_amount": "Min Subscription Amount",
+      "min_redeem_amount": "Min Redeem Amount",
+      "settlement_time": "Settlement time",
+      "dividend_policy": "Dividend Policy",
+      "underlying_asset_information": "Underlying asset information",
+      "the_user_said": "The user said",
+      "increment": "Increment"
+    }
+  },
+  "onchainDocs": {
+    "about_onchain": {
+      "title": "About onchain",
+      "content": ""
+    },
+    "how_it_works": {
+      "title": "How it works",
+      "content": "Shopify merchants worldwide can acceptpayments in cryptocurrencies with real-timeconversions settling in QFUND.Conduct securecosteffective,and near-instant cross borderpayments while having access to UsTreasuries-backed yield.Shopify merchantsworldwide can accept payments incryptocurrencies with real.time conversionsSettling in QFUND.Conduct secure, costeffective,and near-instant cross-border payments while having access to USTreasuries- backed yield.Shopify merchants worldwide can acceptpayments in cryptocurrencies with real-timeconversions settling in QFUND.Conduct secure.cost-effective,and nearinstant cross-borderpayments while having access to UsTreasuries-backed yield.Shopify merchantsWorldwide can accept payments incryotocurrencies with real.time conversionsSettling in QFUND.Conduct secure, costeffective,and near-instant cross-borderpayments while having access to UsTreasuries-backed yield."
+    },
+    "Trust_Security": {
+      "title": "Wallet guide",
+      "content": "Shopify merchants worldwide can acceptpayments in cryptocurrencies with real-timeconversions settling in QFUND.Conduct securecosteffective,and near-instant cross borderpayments while having access to UsTreasuries-backed yield.Shopify merchantsworldwide can accept payments incryptocurrencies with real.time conversionsSettling in QFUND.Conduct secure, costeffective,and near-instant cross-border payments while having access to USTreasuries- backed yield.Shopify merchants worldwide can acceptpayments in cryptocurrencies with real-timeconversions settling in QFUND.Conduct secure.cost-effective,and nearinstant cross-borderpayments while having access to UsTreasuries-backed yield.Shopify merchantsWorldwide can accept payments incryotocurrencies with real.time conversionsSettling in QFUND.Conduct secure, costeffective,and near-instant cross-borderpayments while having access to UsTreasuries-backed yield."
+    },
+    "trade_guide": {
+      "title": "Trade guide",
+      "content": "Shopify merchants worldwide can acceptpayments in cryptocurrencies with real-timeconversions settling in QFUND.Conduct securecosteffective,and near-instant cross borderpayments while having access to UsTreasuries-backed yield.Shopify merchantsworldwide can accept payments incryptocurrencies with real.time conversionsSettling in QFUND.Conduct secure, costeffective,and near-instant cross-border payments while having access to USTreasuries- backed yield.Shopify merchants worldwide can acceptpayments in cryptocurrencies with real-timeconversions settling in QFUND.Conduct secure.cost-effective,and nearinstant cross-borderpayments while having access to UsTreasuries-backed yield.Shopify merchantsWorldwide can accept payments incryotocurrencies with real.time conversionsSettling in QFUND.Conduct secure, costeffective,and near-instant cross-borderpayments while having access to UsTreasuries-backed yield."
+    },
+    "trust_security": {
+      "title": "Trust & Security",
+      "content": "Shopify merchants worldwide can acceptpayments in cryptocurrencies with real-timeconversions settling in QFUND.Conduct securecosteffective,and near-instant cross borderpayments while having access to UsTreasuries-backed yield.Shopify merchantsworldwide can accept payments incryptocurrencies with real.time conversionsSettling in QFUND.Conduct secure, costeffective,and near-instant cross-border payments while having access to USTreasuries- backed yield.Shopify merchants worldwide can acceptpayments in cryptocurrencies with real-timeconversions settling in QFUND.Conduct secure.cost-effective,and nearinstant cross-borderpayments while having access to UsTreasuries-backed yield.Shopify merchantsWorldwide can accept payments incryotocurrencies with real.time conversionsSettling in QFUND.Conduct secure, costeffective,and near-instant cross-borderpayments while having access to UsTreasuries-backed yield."
+    },
+    "contact_us": {
+      "title": "Contact us",
+      "content": "Shopify merchants worldwide can acceptpayments in cryptocurrencies with real-timeconversions settling in QFUND.Conduct securecosteffective,and near-instant cross borderpayments while having access to UsTreasuries-backed yield.Shopify merchantsworldwide can accept payments incryptocurrencies with real.time conversionsSettling in QFUND.Conduct secure, costeffective,and near-instant cross-border payments while having access to USTreasuries- backed yield.Shopify merchants worldwide can acceptpayments in cryptocurrencies with real-timeconversions settling in QFUND.Conduct secure.cost-effective,and nearinstant cross-borderpayments while having access to UsTreasuries-backed yield.Shopify merchantsWorldwide can accept payments incryotocurrencies with real.time conversionsSettling in QFUND.Conduct secure, costeffective,and near-instant cross-borderpayments while having access to UsTreasuries-backed yield."
+    }
+  },
+  "assets": {
+    "onchain_asset_value": "OnChain Asset values",
+    "total_yield": "Total return",
+    "onchain_point": "OnChain points",
+    "redeem": "Redeem",
+    "statement": "Statement",
+    "subscribe": "Subscribe",
+    "initiate_a_redeemption": "Initiate a redeemption",
+    "asset_transaction_is_in_progress": "Asset transaction is in progress",
+    "transaction_completed": "Transaction completed",
+    "token_issuance": "USDC issuance",
+    "price": "Price",
+    "balance": "Balance",
+    "value": "Value",
+    "return": "Return",
+    "onchain_points": "OnChain points",
+    "today": "today",
+    "points": "Points"
+  },
+  "my": {
+    "welcome": "Welcome to OnChan",
+    "empower": "Empower billions with great OnChain services",
+    "service": "Service",
+    "user_guide": "User Guide",
+    "my_assets": "My assets",
+    "transaction": "Transaction",
+    "products": "Products",
+    "about_onchain": "About onchain",
+    "how_it_works": "How it works",
+    "rwa_assets": "RWA Assets",
+    "onchain_token": "Onchain Token",
+    "audits_security": "Audits & Security",
+    "IDLabel": "ID:",
+    "my_wallet": "My Wallet",
+    "balance": "Balance",
+    "transfer": "Transfer"
+  },
+  "system-message": {
+    "title": "System Message",
+    "transaction_address": "Transaction Address:",
+    "transaction_time": "Transaction Time:",
+    "transaction_type": "Transaction Type:",
+    "my_assets": "My Assets",
+    "transaction": "Transaction",
+    "subscription_successful":"Subscription Successful",
+    "redemtion_successful":"Redemption Successful"
+  },
+  "transaction": {
+    "title": "Transaction",
+    "my_assets": "My Assets",
+    "transaction": "Transaction",
+    "processing": "Processing",
+    "success": "Success",
+    "holding": "Holding",
+    "finished": "Finished"
+  },
+  "trade": {
+    "detail": "Detail",
+    "subscribe": "Subscribe",
+    "redeem": "Redeem",
+    "subscribe_fees": "Subscribe fees",
+    "redeem_fees": "Redeem fees",
+    "minimum": "Min",
+    "min_subscription_amount": "Min Subscription Amount",
+    "liquidity": "Liquidity: Realtime /redemption with daily NAV",
+    "insufficient_balance": "insufficient balance",
+    "below_the_minimum_subscription_amount": "Below the minimum subscription amount",
+    "below_the_minimum_redeem_amount": "Below the minimum redemption amount",
+    "privacy_Policy": "By continuing, you agree to OnChain's Privacy Policy and Terms of Service. ",
+    "custody_fees": "Custodian fees",
+    "transaction_fees": "-Transaction fees",
+    "withdrawal_fees": "-Withdrawal fees",
+    "trade_hash": "Trade hash",
+    "not_comply_with_the_incremental_rule": "Not comply with the incremental rule"
+  },
+  "toast": {
+    "replicating_success": "Replicating Success",
+    "my_account": "My account",
+    "assets_page": "My Assets",
+    "redeem_success": {
+      "title": "Redemption is successful",
+      "redeem_feedback": "Token has been placed in your wallet"
+    },
+    "subscribe_success": {
+      "title": "Subscription is successful",
+      "redeem_feedback": "Token has been placed in your wallet"
+    },
+    "redeem_progress": {
+      "title": "Redemption is successful",
+      "description": "Asset transaction is in progress",
+      "h": "(1-2 hours)",
+      "d": "(1 day)"
+    },
+    "join_wx": {
+      "title": "Join WeChat",
+      "description": "",
+      "button": "Save QR code"
+    },
+    "connect_wallet": {
+      "title": "Connect Wallet",
+      "tips": "No wallet? Join OnChain community and get one"
+    },
+    "transfer": {
+      "title": "Transfer",
+      "receive": "Receive",
+      "send": "Send",
+      "network": "Network",
+      "token": "Token",
+      "receive_into_this_wallet": "Receive into this Wallet",
+      "amount": "Amount",
+      "select_network": "Select Network",
+      "from_this_wallet": "From this Wallet",
+      "to_this_wallet": "To this Wallet",
+      "enter_quantity": "Quantity",
+      "available": "Available"
+    },
+    "share": {
+      "title": "Share it with your friends",
+      "copy_link": "Copy link",
+      "copy": "Copy"
+    },
+    "login_successful": "Login successful",
+    "wallet_reconnect_required": "Please reconnect your wallet",
+    "login_failed": "Login failed"
+  },
+  "language": {
+    "en": "English",
+    "zh": "简体中文"
+  },
+  "dwm": {
+    "day": "Day",
+    "week": "Week",
+    "month": "Month"
+  },
+  "empty": {
+    "title": "Nothing here‌"
+  },
+  "tooptip": {
+    "assets": "Current price",
+    "values": "Current values"
+  },
+  "update": {
+    "app_update": "App Update",
+    "current_version": "Current Version",
+    "update_time": "Update Time",
+    "development_version": "Development Version",
+    "checking_updates": "Checking for updates...",
+    "update_available": "New version available",
+    "downloading_update": "Downloading update...",
+    "update_ready": "Update ready",
+    "latest_version": "You have the latest version",
+    "check_failed": "Failed to check for updates",
+    "unknown_status": "Unknown status",
+    "check_update": "Check for Updates",
+    "checking": "Checking...",
+    "force_update_title": "New Version Available (Required)",
+    "optional_update_title": "New Version Available",
+    "default_update_message": "We've released a new version. We recommend updating immediately for a better experience.",
+    "update_now": "Update Now",
+    "remind_later": "Remind Later",
+    "update_complete": "Update Complete",
+    "restart_message": "Update has been downloaded. The app needs to restart to apply the update.",
+    "restart_now": "Restart Now",
+    "download_failed": "Failed to download update",
+    "restart_failed": "Failed to restart app"
+  }
+}

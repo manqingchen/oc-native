@@ -1,0 +1,3 @@
+[submodule "fof_fund_sdk"]
+	path = fof_fund_sdk
+	url = git@github.com:BitxOnchain/fof_fund_sdk.git
