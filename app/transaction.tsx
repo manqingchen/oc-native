@@ -106,7 +106,7 @@ function TransactionMobileCard({
       {/* assets info */}
       <Box className="flex flex-row items-center gap-2.5">
         <Box className="w-[57px] h-[57px]  rounded-[10px]" >
-          {/* <Image source={{ uri: item.product.icon }} className="w-full h-full rounded-full" /> */}
+          <Image source={{ uri: item.product.icon }} className="w-full h-full rounded-full" />
         </Box>
         <Box className="flex flex-col">
           <Text className="text-[22.668px] leading-[27px] font-bold text-[#151517] font-['inter']">
@@ -115,12 +115,15 @@ function TransactionMobileCard({
           <Text className="text-[12.0896px] leading-[18px] font-semibold text-[#929294] font-['inter']">
             {dayjs(item?.orderTime).format('YYYY-MM-DD HH:mm')}
           </Text>
-          <Text className="font-['inter'] flex flex-row font-normal text-[12.0896px] leading-[18px] text-[#929294]">
-            {t('trade.trade_hash')}:{formatUserId(item.txHash, 5)}
+          <Box className="flex flex-row items-center justify-center">
+            <Text className="font-['inter']  font-normal text-[12.0896px] leading-[18px] text-[#929294] ">
+              {t('trade.trade_hash')}:{formatUserId(item.txHash, 5)}
+            </Text>
             <Pressable onPress={handleCopy} className="ml-1">
               {React.createElement(copy, { width: 16, height: 16 })}
             </Pressable>
-          </Text>
+
+          </Box>
         </Box>
       </Box>
 
@@ -134,9 +137,7 @@ function TransactionMobileCard({
         <AssetsInfo label={t("assets.value")} value={formatNav(item.totalAmount?.toString())} unit className="ml-22px" />
       </ScrollView>
 
-      {/* {item.status !== "SEND_USER_SUCCESS" && */}
       <RedemptionProcess process={item.assetStatusList} currentStep={(item.assetStatusList?.map((i: any, index: number) => i.isProcess === true ? index : -1).filter((index: number) => index !== -1).pop() ?? -1) + 1} />
-      {/* } */}
     </Box>
   );
 }
