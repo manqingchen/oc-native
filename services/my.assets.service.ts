@@ -10,9 +10,10 @@ export const MyAssetsService = {
     })
   },
   getMyAsset: (params?: MyAssets.IMyAssetsListParams) => {
+    const url = `/user/v1/listMyAsset?limit=${params?.limit}&cursor=${params.cursor}&language=${params.language}`
     return request<MyAssets.IMyAssetListResponse>({
       method: 'GET',
-      url: `/user/v1/listMyAsset?limit=${params?.limit}&cursor=${params.cursor}&language=${params.language}`,
+      url,
       params,
     })
   },

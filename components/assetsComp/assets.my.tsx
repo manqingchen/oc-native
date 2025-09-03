@@ -1,7 +1,7 @@
 import { useUserStore } from "@/api/request";
 import { Box, Image, Pressable, Text } from "@/components/ui";
 import { useAssets } from "@/hooks/useAsset";
-import { formatAmount } from "@/utils";
+import { formatAmount, formatNav } from "@/utils";
 import { useEffect, useState } from "react";
 import { useMyAssetsStore } from "@/stores/my.assets.store";
 import { useTranslation } from "react-i18next";
@@ -24,26 +24,29 @@ export const MyAssetsInfo = () => {
   }, [])
   const userAssetsList = myAssets?.userAssetList || [] 
   console.log('userAssetsList ===================>>>>>>>>>>> ', userAssetsList);
+  console.log('myAssets?.assetGap ===================>>>>>>>>>>> ', myAssets?.assetGap);
+  const assetGap = myAssets?.assetGap
   return (
     <Box className="flex flex-col justify-between bg-white rounded-3xl p-5 relative">
       <Text className="font-['inter'] text-[10.62px] leading-[13px] font-normal text-[#929294]">
         {t("assets.onchain_asset_value")}
       </Text>
       <Box className="flex flex-row justify-between my-5">
-        <Text className="font-['inter'] text-[26px] leading-[31px] font-bold text-[#151517]">
-          {formatAmount(myAssets?.assetValue)}
-          <Text className="font-['inter'] text-[14px] leading-[17px] font-normal text-[#151517] relative">
-            {Number(myAssets?.assetGap) === 0 || !token ? null : (
-
-              <Box className="h-4 p-1 bg-[#DDFFEF] ml-[45%] flex items-center justify-center rounded absolute -top-6 -right-3.5">
-                <Text className="font-['inter'] text-[10px] font-semibold text-[#00BD65]">
-                  +{formatAmount(myAssets?.assetGap)}{t('assets.today')}
-                </Text>
-              </Box>
-            )}
-            {t("product.detail.USDC")}
+        <Box className="relative">
+          <Text className="font-['inter'] text-[26px] leading-[31px] font-bold text-[#151517]">
+            {formatAmount(myAssets?.assetValue)}
+            <Text className="font-['inter'] text-[14px] leading-[17px] font-normal text-[#151517]">
+              {t("product.detail.USDC")}
+            </Text>
           </Text>
-        </Text>
+          {Number(assetGap) === 0 || !token ? null : (
+            <Box className="h-4 px-2 bg-[#DDFFEF] flex items-center justify-center rounded absolute -top-3 -right-2">
+              <Text className="font-['inter'] text-[10px] font-semibold text-[#00BD65]">
+                  {Number(assetGap) > 0 ? '+' : ''}{formatNav(assetGap)}{t('assets.today')}
+              </Text>
+            </Box>
+          )}
+        </Box>
         {isShowChart ? (
           <Pressable onPress={() => setIsShowChart(false)}>
             <Image source={myAssetsTop} />

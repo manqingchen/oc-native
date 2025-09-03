@@ -41,13 +41,14 @@ export const AssetsCard = ({ item }: { item: MyAssets.IUserAsset }) => {
         </Box>
 
         <ScrollView showsHorizontalScrollIndicator={false} horizontal className='flex flex-row mt-4' >
-          <AssetsInfo label={t("assets.price")} value={item.fundNetValue?.toString()} unit  />
+           <AssetsInfo label={t("assets.price")} value={item.fundNetValue?.toString()} unit />
 
-          <AssetsInfo label={t("assets.value")} value={formatNav(item.totalAmount?.toString())} unit  />
+          <AssetsInfo label={t("assets.balance")} value={formatNav(item.productQuantity?.toString())} unit className="ml-22px" />
+          <AssetsInfo label={t("assets.value")} value={formatNav(item.totalAmount?.toString())} unit className="ml-22px" />
 
-          <AssetsInfo label={t("assets.return")} value={formatNav(item?.assetYeild?.toString())} unit />
-          <AssetsInfo label={t("assets.points")} value={item.points?.toString() || '2222222222222222222222222220'}  />
-        </ScrollView>
+          <AssetsInfo label={t("assets.return")} value={formatNav(item?.assetYeild?.toString())} unit className="w-55px" />
+          <AssetsInfo label={t("assets.points")} value={item.points?.toString() || '0'} className="" />
+         </ScrollView>
         <RedemptionProcess process={item?.assetStatusList} currentStep={(item?.assetStatusList?.map((f: any, index: number) => f.isProcess ? index : -1).filter((index: number) => index !== -1).pop() ?? -1) + 1} />
 
         <Box className="flex flex-row gap-3 mt-4">

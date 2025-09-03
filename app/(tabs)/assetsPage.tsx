@@ -27,6 +27,7 @@ export default function AssetsPage() {
     cursor: 10000
   });
 
+  console.log('myAssetList ===================>>>>>>>>>>> ', myAssetList);
   useEffect(() => {
     getMyAssetList({
       limit: 1000,
