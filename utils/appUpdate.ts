@@ -53,7 +53,7 @@ export class AppUpdateManager {
       }
 
       this.updateStatus = UpdateStatus.CHECKING;
-      showToast.info(i18n.t('update.checking_updates'));
+      // showToast.info(i18n.t('update.checking_updates'));
 
       const update = await Updates.checkForUpdateAsync();
       
@@ -76,7 +76,7 @@ export class AppUpdateManager {
   async downloadAndInstallUpdate(): Promise<boolean> {
     try {
       this.updateStatus = UpdateStatus.DOWNLOADING;
-      showToast.info(i18n.t('update.downloading_update'));
+      // showToast.info(i18n.t('update.downloading_update'));
 
       const result = await Updates.fetchUpdateAsync();
       
@@ -90,7 +90,7 @@ export class AppUpdateManager {
     } catch (error) {
       console.error('下载更新失败:', error);
       this.updateStatus = UpdateStatus.ERROR;
-      showToast.error(i18n.t('update.download_failed'));
+      // showToast.error(i18n.t('update.download_failed'));
       return false;
     }
   }
