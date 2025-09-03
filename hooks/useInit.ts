@@ -4,10 +4,12 @@ import { Language } from '@/constants/language';
 import i18n from "@/messages/i18n";
 import { useAppUpdate } from '@/hooks/useAppUpdate';
 import { usePhantomWallet } from '@/stores/phantomWalletStore';
+import { usePushNotifications } from '@/hooks/usePushNotifications';
 export const useInit = () => {
   const { autoCheckOnLaunch } = useAppUpdate();
-  const { wallet, initWallet } = usePhantomWallet()
-  const run = useRef(false)
+  const { wallet, initWallet } = usePhantomWallet();
+  const { initializePush } = usePushNotifications();
+  const run = useRef(false);
 
   useEffect(() => {
       // 设置语言
@@ -15,7 +17,10 @@ export const useInit = () => {
 
       // 自动检查更新
       autoCheckOnLaunch();
-  }, [i18n.language, autoCheckOnLaunch])
+
+      // 初始化推送服务
+      initializePush();
+  }, [i18n.language, autoCheckOnLaunch, initializePush])
 
   useEffect(() => {
      const initializeApp = async () => {

@@ -1,100 +1,67 @@
-import { twClassnames } from "@/utils";
-import React, { useEffect, useMemo, useState } from "react";
-import { Image, LayoutChangeEvent, StyleSheet, View } from "react-native";
+import React, { useEffect, useMemo } from "react";
+import { StyleSheet, View, Text } from "react-native";
 import Animated, {
-  Easing,
-  runOnJS,
-  useAnimatedStyle,
   useSharedValue,
+  useAnimatedStyle,
   withRepeat,
   withTiming,
+  Easing,
 } from "react-native-reanimated";
-import { Box, Text } from "../ui";
 import { useAssets } from "@/hooks/useAsset";
+import { Image } from 'expo-image'; // 从 expo-image 导入
 
-
-type ScrollbarProps = {
-  speed?: number; // px/s
+type MarqueeProps = {
+  speed?: number; // 滚动速度 (px/s)
   height?: number;
 };
 
-export const Marquee: React.FC<ScrollbarProps> = ({
-  speed = 60, // px/s
+export const Marquee: React.FC<MarqueeProps> = ({
+  speed = 50,
   height = 40,
 }) => {
-  const [contentWidth, setContentWidth] = useState(0);
-  const [containerWidth, setContainerWidth] = useState(0);
   const translateX = useSharedValue(0);
-  const { marquee } = useAssets();
 
-  const marqueeArr = useMemo(() => marquee, [marquee])
-  // 计算动画时长
-  const getDuration = () => {
-    if (!contentWidth) return 10000;
-    return (contentWidth / speed) * 1000;
-  };
+  const { marquee } = useAssets()
+  // 轮播图数据 - 可以是文本、图片或其他内容
+  const marqueeItems = useMemo(() => marquee, []);
 
-  // 动画循环逻辑
+  // 计算总宽度
+  const itemWidth = 140;
+  const itemSpacing = 20;
+  const totalWidth = marqueeItems.length * (itemWidth + itemSpacing);
+
   useEffect(() => {
-    if (contentWidth === 0 || containerWidth === 0) return;
-    translateX.value = 0;
+    // 无缝循环：从0位置移动到-totalWidth位置
+    const duration = (totalWidth / speed) * 1000;
+
+    // 开始动画
     translateX.value = withRepeat(
-      withTiming(-contentWidth, {
-        duration: getDuration(),
+      withTiming(-totalWidth, {
+        duration: duration,
         easing: Easing.linear,
       }),
       -1,
-      false,
-      (finished) => {
-        if (finished) {
-          runOnJS(() => {
-            translateX.value = 0;
-          })();
-        }
-      }
+      false
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contentWidth, containerWidth, speed, marqueeArr]);
+  }, [totalWidth, speed, translateX]);
 
-  // 动画样式
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
-    flexDirection: "row",
   }));
 
-  // 渲染内容
-  const renderContent = () => (
-    <View style={styles.row}>
-      {marqueeArr?.map((Item, idx) => (
-        <Box key={idx} style={styles.item}>
-          <Text>
-            <Item
-              style={{ marginRight: 18.66 }}
-            />
-          </Text>
-        </Box>
-      ))}
+  const renderItem = (Item: any, index: number) => (
+    <View key={index} style={styles.item}>
+      {/* <Text style={styles.itemText}>{item.content}</Text> */}
+      <Item height="100%" />
     </View>
   );
 
-  // 布局回调
-  const onContentLayout = (e: LayoutChangeEvent) => {
-    setContentWidth(e.nativeEvent.layout.width);
-  };
-  const onContainerLayout = (e: LayoutChangeEvent) => {
-    setContainerWidth(e.nativeEvent.layout.width);
-  };
-
   return (
-    <View className={twClassnames("h-[30px]")} style={[styles.container, { height }]} onLayout={onContainerLayout}>
-      <Animated.View
-        style={[animatedStyle, { width: contentWidth * 3 }]}
-      // 让内容宽度撑满，避免闪烁
-      >
-        <View style={styles.row} onLayout={onContentLayout}>
-          {renderContent()}
-        </View>
-        <View style={styles.row}>{renderContent()}</View>
+    <View style={[styles.container, { height }]}>
+      <Animated.View style={[styles.content, animatedStyle]}>
+        {/* 渲染两组相同的内容以实现无缝循环 */}
+        {marqueeItems.map(renderItem)}
+        {marqueeItems.map((item, index) => renderItem(item, index + marqueeItems.length))}
       </Animated.View>
     </View>
   );
@@ -104,18 +71,27 @@ const styles = StyleSheet.create({
   container: {
     overflow: "hidden",
     width: "100%",
-    backgroundColor: "transparent",
-    flexDirection: "row",
-    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 10,
   },
-  row: {
+  content: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 20,
   },
   item: {
-    marginHorizontal: 16,
-    flexDirection: "row",
+    // width: 140,
+    height: 40,
+    borderRadius: 6,
+    // marginRight: 20,
+    justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: 12,
+    flexShrink: 0, // 防止项目被压缩
+  },
+  itemText: {
+    fontSize: 12,
+    color: "#495057",
+    fontWeight: "500",
+    textAlign: "center",
   },
 });

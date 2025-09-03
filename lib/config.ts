@@ -48,3 +48,74 @@ export const supportWallets = {
     playStoreUrl: 'https://play.google.com/store/apps/details?id=app.phantom'
   }
 
+// 推送通知配置
+export const PUSH_NOTIFICATION_CONFIG = {
+  // 推送消息类型
+  MESSAGE_TYPES: {
+    TRANSACTION_COMPLETE: 'transaction_complete',
+    IDENTITY_VERIFICATION: 'identity_verification',
+    STATEMENT_INFO: 'statement_info',
+  },
+
+  // 推送跳转页面
+  SCREENS: {
+    TRANSACTION: 'transaction',
+    SYSTEM_MESSAGE: 'system-message',
+    IDENTITY: 'identity',
+  },
+
+  // 推送消息模板
+  MESSAGES: {
+    SUBSCRIPTION_COMPLETE: {
+      zh: {
+        title: '交易提醒',
+        body: '申购完成，点击查看详情'
+      },
+      en: {
+        title: 'Transaction message',
+        body: 'Subscription successful, see more'
+      }
+    },
+    REDEMPTION_COMPLETE: {
+      zh: {
+        title: '交易提醒',
+        body: '赎回完成，点击查看详情'
+      },
+      en: {
+        title: 'Transaction message',
+        body: 'Redemption successful, see more'
+      }
+    },
+    IDENTITY_SUCCESS: {
+      zh: {
+        title: '身份认证成功',
+        body: '恭喜您，您的身份认证成功'
+      },
+      en: {
+        title: 'Identity verification successful',
+        body: 'Congratulations, your identity verification has been successful'
+      }
+    },
+    IDENTITY_FAILED: {
+      zh: {
+        title: '身份认证失败',
+        body: '抱歉，您的身份认证失败'
+      },
+      en: {
+        title: 'Identity verification failed',
+        body: 'Sorry, your identity verification has been failed'
+      }
+    },
+    STATEMENT_GENERATED: {
+      zh: {
+        title: '结单信息',
+        body: '9月结单已经生成，点击查看'
+      },
+      en: {
+        title: 'Statement Information',
+        body: 'The September statement has been generated. Click to view.'
+      }
+    }
+  }
+}
+

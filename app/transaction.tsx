@@ -36,25 +36,23 @@ export default function Transaction() {
 
   const list = useRenderMyAssetList(myAssetList as MyAssets.IMyAssetListResponse)
 
-  const render = () => {
-    if (list?.length > 0) {
-      return list?.map(item => (
-        <TransactionMobileCard key={item.orderId} item={item} />
-      ))
-    } else {
-      return <Box className="h-full"><Empty /></Box>
-    }
-  }
-
   return (
     <Box className="flex flex-col h-screen">
       <MobileCommonBar title={t("transaction.title")} />
-      <ScrollView className="h-full flex-1 overflow-scroll px-5">
-        <Box className="flex flex-col gap-5 pb-5 pt-5">
-          {render()}
+      {list?.length > 0 ? (
+        <ScrollView className="h-full flex-1 overflow-scroll px-5">
+          <Box className="flex flex-col gap-5 pb-5 pt-5">
+            {list.map((item) => (
+              <TransactionMobileCard key={item.orderId} item={item} />
+            ))}
+          </Box>
+          <Box style={{ width: 10, height: 90 }} />
+        </ScrollView>
+      ) : (
+        <Box className="flex-1 items-center justify-center">
+          <Empty />
         </Box>
-        <Box style={{ width: 10, height: 90 }} />
-      </ScrollView>
+      )}
     </Box>
   );
 }

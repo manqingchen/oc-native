@@ -30,10 +30,17 @@
       },
       "package": "dev.privy.example"
     },
+    "notification": {
+      "icon": "./assets/images/icon.png",
+      "color": "#FE5F00"
+    },
     "extra": {
       "privyAppId": "cmen0rumq0003lb0btfagk0s5",
       "privyClientId": "client-WY6PqXfLbW6xuDQbun2FSn9MGcmUZjtqCNcVA6VFzWg8B",
-      "passkeyAssociatedDomain": "https://<your-associated-domain>"
+      "passkeyAssociatedDomain": "https://<your-associated-domain>",
+      "eas": {
+        "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+      }
     },
     "plugins": [
       "expo-router",
@@ -50,7 +57,15 @@
           }
         }
       ],
-      "expo-font"
+      "expo-font",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon.png",
+          "color": "#FE5F00",
+          "sounds": []
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

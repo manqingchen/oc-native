@@ -18,11 +18,11 @@ import { useEffect } from "react";
 import { HomeBar } from "@/components/home/home.bar";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-import {useModal} from '@/hooks/modal.hook'
+import { useModal } from '@/hooks/modal.hook'
 
 export default function Index() {
   const { t } = useTranslation();
-  const {open} = useModal()
+  const { open } = useModal()
   const { wallet } = usePhantomWallet()
   const { connect, disconnect, signMessage, address } = wallet || {}
 
@@ -81,10 +81,6 @@ export default function Index() {
           locations={[0.0769, 0.3381, 0.8611]}
           start={{ x: 0.5, y: 1 }} // 从底部中心开始
           end={{ x: 0.5, y: 0 }} // 向顶部中心扩散
-          style={{
-            width: "100%",
-            height: "100%",
-          }}
         >
           <Box className={twClassnames("mt-8 px-4")}>
             <Text
@@ -123,12 +119,24 @@ export default function Index() {
               </Text>
 
             </Box>
+
+            {/* 开发测试按钮 */}
+            {__DEV__ && (
+              <Box className="mx-4 mt-8">
+                <Button
+                  onPress={() => router.push('/push-test')}
+                  className="bg-blue-500"
+                >
+                  <ButtonText className="text-white">🔔 推送测试</ButtonText>
+                </Button>
+              </Box>
+            )}
+
             <BottomLogo className="mt-[100px] mb-[143px]" />
-            <Marquee />
           </Box>
-          {/* <Marquee /> */}
-          <Footer />
+          <Marquee />
         </LinearGradient>
+        <Footer />
       </Box>
     </ScrollView >
   );

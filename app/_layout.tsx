@@ -6,6 +6,7 @@ import { Stack } from "expo-router";
 import { PrivyProvider } from "@privy-io/expo";
 import { PrivyElements } from "@privy-io/expo/ui";
 import { ModalType } from "@/constants/modal";
+import * as Linking from 'expo-linking';
 import {
   Inter_400Regular,
   Inter_500Medium,
@@ -30,6 +31,7 @@ import { Layout } from "@/components/layout";
 import { useModal } from '@/hooks/modal.hook';
 import { useInit } from '@/hooks/useInit';
 import { BaseModal } from '@/components/modal/base.modal';
+import { router } from 'expo-router';
 
 export default function RootLayout() {
   const { isOpen, modalType, close } = useModal();
@@ -39,6 +41,45 @@ export default function RootLayout() {
     Inter_500Medium,
     Inter_600SemiBold,
   });
+
+  // 处理深度链接
+  React.useEffect(() => {
+    const handleDeepLink = (url: string) => {
+      console.log('📱 收到深度链接:', url);
+
+      try {
+        const urlObj = new URL(url);
+        const pathname = urlObj.pathname;
+        const searchParams = urlObj.searchParams;
+
+        // 处理推送相关的深度链接
+        if (pathname === '/transaction' || searchParams.get('screen') === 'transaction') {
+          router.push('/transaction');
+        } else if (pathname === '/system-message' || searchParams.get('screen') === 'system-message') {
+          router.push('/system-message');
+        }
+        // 可以根据需要添加更多路由处理
+      } catch (error) {
+        console.error('深度链接处理失败:', error);
+      }
+    };
+
+    // 监听深度链接
+    const subscription = Linking.addEventListener('url', ({ url }) => {
+      handleDeepLink(url);
+    });
+
+    // 检查应用启动时的深度链接
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        handleDeepLink(url);
+      }
+    });
+
+    return () => {
+      subscription?.remove();
+    };
+  }, []);
 
   // 获取屏幕尺寸
   const { height } = Dimensions.get('window');
@@ -126,6 +167,7 @@ export default function RootLayout() {
                       <Stack.Screen name="trade" options={{ headerShown: false }} />
                       <Stack.Screen name="transaction" options={{ headerShown: false }} />
                       <Stack.Screen name="product-activities" options={{ headerShown: false }} />
+                      <Stack.Screen name="push-test" options={{ headerShown: false }} />
                     </Stack>
                   </ContentWrapper>
                 </Box>

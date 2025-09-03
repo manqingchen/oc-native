@@ -11,15 +11,11 @@ export function BottomLogo({
   className?: string;
 }) {
   const { t } = useTranslation();
-  const { homeDescription, homeOCText } = useAssets()
+  const { homeDescription: HomeDescriptionIcon, homeOCText: HomeOCTextIcon } = useAssets()
   return (
     <Box className={twClassnames("flex flex-col gap-2 justify-center items-center", className)}>
-      <Image
-        source={homeDescription}
-        alt={t("home.description")}
-        style={{ width: 118, height: 80 }}
-      />
-      <Image source={homeOCText} alt={"onchain"} />
+      <HomeDescriptionIcon />
+      <HomeOCTextIcon />
     </Box>
   );
 }
