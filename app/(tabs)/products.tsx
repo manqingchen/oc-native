@@ -12,7 +12,7 @@ import { ActivityIndicator, RefreshControl, ScrollView } from "react-native";
 
 export default function Products() {
   const { t } = useTranslation();
-  
+
   const {
     isLoading,
     refreshing,
@@ -24,12 +24,34 @@ export default function Products() {
   useEffect(() => {
     getProductList();
   }, []);
-
+  const render = () => {
+    if (isLoading && productList.length === 0) {
+    return (
+      <Box className="items-center flex justify-center h-full">
+        <ActivityIndicator size="large" />
+        <Text className="mt-2 text-gray-500">
+          {t('common.loading')}
+        </Text>
+      </Box>
+    )
+    }
+    if (productList.length > 0) {
+      return (
+        productList.map((product) => (
+          <Box key={product.productId}>
+            <ProductCard product={product} />
+          </Box>
+        ))
+      )
+    }
+    return <Empty />
+  }
   return (
     <Box className="h-full">
       <MobileHomeBar />
       <ScrollView
         className="flex-1 h-full"
+        contentContainerStyle={{ flexGrow: 1 }}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -37,38 +59,17 @@ export default function Products() {
           />
         }
       >
-        <Box className="h-full">
-          <Box className="!px-0 flex justify-between">
-            <Box
-              className={twClassnames(
-                "mb-[100px] mt-5",
-                "gap-[31px] p-5"
-              )}
-            >
-              {/* 加载状态 */}
-              {isLoading && productList.length === 0 && (
-                <Box className="py-20 items-center">
-                  <ActivityIndicator size="large" />
-                  <Text className="mt-2 text-gray-500">
-                    {t('common.loading', '加载中...')}
-                  </Text>
-                </Box>
-              )}
-
-              {/* 产品列表 */}
-              {productList?.map((product) => (
-                <Box key={product.productId}>
-                  <ProductCard product={product} />
-                </Box>
-              ))}
-
-              {/* 空状态 */}
-              {productList.length === 0 && !isLoading && (
-                <Empty />
-              )}
-            </Box>
-            <Footer />
+        <Box className="flex justify-between flex-col h-full">
+          <Box
+            className={twClassnames(
+              "mb-[100px]",
+              "gap-[31px] p-5 pt-2",
+              "flex-1 h-full"
+            )}
+          >
+            {render()}
           </Box>
+          <Footer />
         </Box>
       </ScrollView>
     </Box>

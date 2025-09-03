@@ -12,6 +12,7 @@ import { AssetsCard } from "@/components/assetsComp/assets.card";
 import { usePhantomWallet } from '@/stores/phantomWalletStore'
 import { ScrollView } from "react-native";
 import { MyAssetsInfo } from "@/components/assetsComp/assets.my";
+import { Empty } from "@/components/empty";
 
 export default function AssetsPage() {
   // 获取URL参数
@@ -26,7 +27,6 @@ export default function AssetsPage() {
     cursor: 10000
   });
 
-  console.log('myAssetList ===================>>>>>>>>>>> ', myAssetList);
   useEffect(() => {
     getMyAssetList({
       limit: 1000,
@@ -34,10 +34,10 @@ export default function AssetsPage() {
     })
   }, [])
   return (
-    <Box className="flex flex-col">
+    <Box className="flex flex-col h-full">
       <MobileHomeBar />
-      <ScrollView className={twClassnames("pt-2 px-5")}>
-        <Box className={twClassnames("pb-[60px]")}>
+      <ScrollView className={twClassnames("pt-2 px-5 h-full")}>
+        <Box className={twClassnames("pb-[60px] flex flex-1 h-full")}>
           <MyAssetsInfo />
           <Box className="mt-[17px] mb-[21px] flex flex-row justify-between" >
             <Text className={twClassnames("pl-4 font-['Roboto'] font-medium text-[18px] leading-[21px] text-black")}>
@@ -47,9 +47,15 @@ export default function AssetsPage() {
               <OrderHistoryIcon />
             </Link>
           </Box>
-          <Box className="gap-5 flex flex-row flex-wrap mb-10">
-            {myAssetList?.map((item, index) =>
-              <AssetsCard key={index} item={item} />
+          <Box className="gap-5 flex flex-row flex-wrap mb-10 flex-1 ">
+            {myAssetList && myAssetList.length > 0 ? (
+              myAssetList.map((item, index) =>
+                <AssetsCard key={index} item={item} />
+              )
+            ) : (
+              <Box className="w-full flex items-center justify-center py-20">
+                <Empty />
+              </Box>
             )}
           </Box>
         </Box>

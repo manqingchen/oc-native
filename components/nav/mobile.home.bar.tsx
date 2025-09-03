@@ -8,7 +8,7 @@ import { useAssets } from "@/hooks/useAsset";
 export function MobileHomeBar() {
   const { logo: LogoIcon } = useAssets();
   return (
-    <Box className="mx-5 flex flex-row items-center justify-between shrink-0 h-10 mt-3">
+    <Box className="mx-5 flex flex-row items-center justify-between shrink-0  mt-3 mb-3">
       <Link href='/'>
       <LogoIcon />
       </Link>

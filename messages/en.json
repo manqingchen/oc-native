@@ -258,5 +258,8 @@
     "restart_now": "Restart Now",
     "download_failed": "Failed to download update",
     "restart_failed": "Failed to restart app"
+  },
+  "common": {
+    "loading": "loading..."
   }
 }

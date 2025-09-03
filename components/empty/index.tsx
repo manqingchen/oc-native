@@ -6,7 +6,9 @@ export function Empty() {
   const { t } = useTranslation()
   const { empty } = useAssets()
   return (
-    <Box className="flex flex-col items-center justify-center h-full">
+    <Box style={{
+      // flexGrow: 1
+    }} className="flex flex-col items-center justify-center h-full">
       <Image source={empty} style={{
         width: 174,
         height: 163

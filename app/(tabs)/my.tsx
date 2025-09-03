@@ -46,7 +46,7 @@ export default function My() {
           <Wrapper>
             <Item
               title={t("my.my_assets")}
-              href="/assets"
+              href="/assetsPage"
               icon={<MyAssetsRightIcon />}
             />
             <Item

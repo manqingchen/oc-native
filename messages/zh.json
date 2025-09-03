@@ -245,5 +245,8 @@
     "restart_now": "立即重启",
     "download_failed": "下载更新失败",
     "restart_failed": "重启应用失败"
+  },
+  "common": {
+    "loading": "加载中..."
   }
 }
