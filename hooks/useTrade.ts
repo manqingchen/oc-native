@@ -18,8 +18,7 @@ import { useLocalSearchParams } from "expo-router";
 import { useWalletBalance } from "./useWalletBalance";
 import { Transaction, SystemProgram, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import { usePhantomWallet } from '@/stores/phantomWalletStore'
-import Toast from "react-native-root-toast";
-import { showToast } from '@/utils/toast';
+import { showToast } from "@/utils/toast";
 export function useTrade({
   product,
 }: {
@@ -51,8 +50,9 @@ export function useTrade({
 
   const buy = async () => {
     console.log('begin buy !!!')
-    setLoading(true)
     try {
+      setLoading(true)
+      open(ModalType.LOADING)
       const res = await OrderService.subscribeOrder({
         productId: product.productId,
         totalAmount: amount,
@@ -91,7 +91,8 @@ export function useTrade({
       setLoading(false)
       return res1;
     } catch (error: any) {
-      Toast.show(error?.message || error?.toString() || 'Transaction failed')
+      console.log('error ===================>>>>>>>>>>> ', error);
+      showToast.success(error?.message || error?.toString() || 'Transaction failed')
       close()
       setLoading(false)
       console.error('buy error ===================>>>>>>>>>>> ', error);
@@ -100,6 +101,7 @@ export function useTrade({
   const redeem = async () => {
     try {
       setLoading(true)
+      open(ModalType.LOADING)
       const res = await OrderService.redemptionOrder({
         productId: product.productId,
         redeemAmount: amount,
@@ -125,21 +127,16 @@ export function useTrade({
       console.log('res1 ===================>>>>>>>>>>> ', res1);
       console.log('res1.success ===================>>>>>>>>>>> ', res1.success);
       if (!res1.success) {
-        close()
-        Toast.show((res1 as any).msg)
-        // toast.error((res1 as any).msg)
-        setLoading(false)
+        throw new Error((res1 as any).msg)
       }
-      console.log('111 ===================>>>>>>>>>>> ', 111);
       close().then(() => {
         open(ModalType.REDEEM_PROGRESS)
       })
-      console.log('111 ===================>>>>>>>>>>> ', 222);
       setAmount("");
       setIndicativeQuantity("");
       return res1;
     } catch (error: any) {
-      Toast.show(error?.message || error?.toString() || 'Transaction failed')
+      showToast.success(error?.message || error?.toString() || 'Transaction failed')
       console.error('redeem error ===================>>>>>>>>>>> ', error);
       close()
       setLoading(false)
@@ -213,11 +210,6 @@ export function useTrade({
     }
   }
 
-  useEffect(() => {
-    if (loading) {
-      open(ModalType.LOADING)
-    }
-  }, [loading])
   return {
     cannotPurchase,
     buy,

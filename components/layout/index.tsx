@@ -46,7 +46,7 @@ export const Layout = ({ children }) => {
   }, [currentPath, searchParams]);
 
   const phantom = usePhantomDeeplinkWalletConnector({
-    appUrl: 'https://test1.onchain.channel',
+    appUrl: 'https://onchain.channel',
     redirectUri: '/back',
   });
 

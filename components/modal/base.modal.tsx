@@ -17,7 +17,7 @@ export function BaseModal({
 }) {
   if (!type) return null;
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen}>
       {type !== ModalType.LOADING && <ModalBackdrop />}
       {type === ModalType.SUCCESS && <SuccessModal />}
       {type === ModalType.REDEEM_PROGRESS && <RedeemProgressModal />}

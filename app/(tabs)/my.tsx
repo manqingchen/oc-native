@@ -16,6 +16,7 @@ import { useModal } from "@/hooks/modal.hook";
 import { useWalletBalance } from "@/hooks/useWalletBalance";
 import { useWalletStore } from "@/stores/wallet.store";
 import { supportWallets } from '@/lib/config'
+import { showToast } from "@/utils/toast";
 
 export default function My() {
   const { myAssetsRight: MyAssetsRightIcon } = useAssets();
@@ -107,22 +108,7 @@ function MyWallet() {
 
   const handleCopy = async () => {
     await Clipboard.setStringAsync(publicKey?.toString() || "");
-    toast.show({
-      placement: "top",
-      render: () => {
-        return (
-          <Toast
-            action="success"
-            variant="solid"
-            className="flex flex-row items-center gap-[11px]"
-          >
-            <Image source={toastSuccess} alt="toastSuccess" />
-            <ToastTitle>{t("toast.replicating_success")}</ToastTitle>
-          </Toast>
-        );
-      },
-      duration: 1000,
-    });
+    showToast.success(t("toast.replicating_success"))
   };
   return (
     <Box className="mt-[25px]">
@@ -163,29 +149,14 @@ function MyWallet() {
 
 function UserInfo() {
   const { t } = useTranslation();
-  const { copy, toastSuccess, myAddress: MyAddressIcon } = useAssets();
+  const { copy: CopyIcon, toastSuccess: ToastSuccessIcon, myAddress: MyAddressIcon } = useAssets();
   const { wallet } = usePhantomWallet()
   const address = wallet?.address
   const toast = useToast();
 
   const handleCopy = async () => {
     await Clipboard.setStringAsync(address?.toString() || "");
-    toast.show({
-      placement: "top",
-      render: () => {
-        return (
-          <Toast
-            action="success"
-            variant="solid"
-            className="flex flex-row items-center gap-[11px]"
-          >
-            <Image source={toastSuccess} alt="toastSuccess" />
-            <ToastTitle>{t("toast.replicating_success")}</ToastTitle>
-          </Toast>
-        );
-      },
-      duration: 1000,
-    });
+    showToast.success(t("toast.replicating_success"))
   };
 
   return (
@@ -203,8 +174,8 @@ function UserInfo() {
             {t("my.IDLabel")}
             {formatUserId(address || "", 5, 4)}
           </Text>
-          <Pressable onPress={handleCopy}>
-            <Image source={copy} alt="copy" />
+          <Pressable onPress={handleCopy} className="ml-1">
+            <CopyIcon />
           </Pressable>
         </Box>
       </Box>

@@ -5,33 +5,33 @@ export const toastConfig = {
   // 基础配置
   base: {
     duration: Toast.durations.SHORT,
-    position: Toast.positions.TOP,
+    position: Toast.positions.TOP + 30,
     shadow: true,
     animation: true,
     hideOnPress: true,
-    opacity: 0.9,
+    opacity: 1,
   },
-  
+
   // 成功提示样式
   success: {
-    // backgroundColor: '#4CAF50',
-    textColor: '#ffffff',
+    backgroundColor: '#fff',
+    textColor: '#000',
   },
-  
+
   // 错误提示样式
   error: {
     backgroundColor: '#F44336',
     textColor: '#ffffff',
     duration: Toast.durations.LONG,
   },
-  
+
   // 警告提示样式
   warning: {
     backgroundColor: '#FF9800',
     textColor: '#ffffff',
     duration: Toast.durations.LONG,
   },
-  
+
   // 信息提示样式
   info: {
     backgroundColor: '#2196F3',
@@ -48,7 +48,7 @@ export const showToast = {
       ...customConfig,
     });
   },
-  
+
   error: (message: string, customConfig?: any) => {
     return Toast.show(message, {
       ...toastConfig.base,
@@ -56,7 +56,7 @@ export const showToast = {
       ...customConfig,
     });
   },
-  
+
   warning: (message: string, customConfig?: any) => {
     return Toast.show(message, {
       ...toastConfig.base,
@@ -64,7 +64,7 @@ export const showToast = {
       ...customConfig,
     });
   },
-  
+
   info: (message: string, customConfig?: any) => {
     return Toast.show(message, {
       ...toastConfig.base,
@@ -72,7 +72,7 @@ export const showToast = {
       ...customConfig,
     });
   },
-  
+
   // 自定义 Toast
   custom: (message: string, config: any) => {
     return Toast.show(message, {

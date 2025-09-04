@@ -14,6 +14,7 @@ import { useMyTransactionList } from "@/hooks/useMyAssets";
 import { useAssets } from "@/hooks/useAsset";
 import * as Clipboard from "expo-clipboard";
 import { ScrollView } from "react-native";
+import { showToast } from "@/utils/toast";
 
 export default function Transaction() {
   const { t } = useTranslation();
@@ -68,23 +69,7 @@ function TransactionMobileCard({
 
   const handleCopy = async () => {
     await Clipboard.setStringAsync(item.txHash);
-    toast.show({
-      placement: "top",
-      render: () => {
-        const ToastSuccessIcon = toastSuccess;
-        return (
-          <Toast
-            action="success"
-            variant="solid"
-            className="flex flex-row items-center gap-[11px]"
-          >
-            <ToastSuccessIcon width={20} height={20} />
-            <ToastTitle>{t("toast.replicating_success")}</ToastTitle>
-          </Toast>
-        );
-      },
-      duration: 3000,
-    });
+    showToast.success(t("toast.replicating_success"))
   };
   return (
     <Box className="w-full rounded-[28px] bg-white p-[22px] flex flex-col gap-4">
