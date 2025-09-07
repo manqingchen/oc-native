@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Moving Asset OnChain",
+    "name": "OnChain",
     "slug": "expo-starter",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -37,10 +37,7 @@
     "extra": {
       "privyAppId": "cmen0rumq0003lb0btfagk0s5",
       "privyClientId": "client-WY6PqXfLbW6xuDQbun2FSn9MGcmUZjtqCNcVA6VFzWg8B",
-      "passkeyAssociatedDomain": "https://<your-associated-domain>",
-      "eas": {
-        "projectId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
-      }
+      "passkeyAssociatedDomain": "https://<your-associated-domain>"
     },
     "plugins": [
       "expo-router",

@@ -2,44 +2,72 @@
 import { chartDataOption } from '@/constants/chart.mock';
 import { useMyAssetsStore } from '@/stores/my.assets.store';
 import { formatChartLine } from '@/utils/chart.utils';
-import { SkiaChart, SkiaRenderer } from '@wuba/react-native-echarts';
-import { LineChart } from 'echarts/charts';
-import { GridComponent } from 'echarts/components';
-import * as echarts from 'echarts/core';
 import { usePathname } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-
-echarts.use([SkiaRenderer, LineChart, GridComponent]);
+import ECharts from 'react-native-echarts-pro';
 
 export function ProductTrendChart({ data, height }: { data?: any; height?: number }) {
-  const skiaRef = useRef<any>(null);
+  const chartRef = useRef<any>(null);
   const containerRef = useRef<View>(null);
   const [chartWidth, setChartWidth] = React.useState(0);
-  const [chartData, setChartData] = useState<any>()
+  const [chartData, setChartData] = useState<any>();
   const dwm = useMyAssetsStore(state => state.dwm);
-  const { t } = useTranslation()
-  const pathname = usePathname()
+  const { t } = useTranslation();
+  const pathname = usePathname();
+
   const tooltipTitleMap = {
     product: t('tooptip.assets'),
     assets: t('tooptip.values')
-  }
-  const tooltipTitle = pathname.includes('/assets') ? tooltipTitleMap['assets'] : tooltipTitleMap['product']
+  };
+  const tooltipTitle = pathname.includes('/assets') ? tooltipTitleMap['assets'] : tooltipTitleMap['product'];
 
   useEffect(() => {
-    let cData
+    let cData;
     if (!data) cData = chartDataOption[dwm];
-    else cData = formatChartLine(data, dwm)
-    setChartData(cData)
-  }, [data])
+    else cData = formatChartLine(data, dwm);
+    setChartData(cData);
+  }, [data, dwm]);
 
-  const initChart = (width: number) => {
-    const option = {
+  // 计算Y轴的动态min和max值
+  const getYAxisRange = () => {
+    if (!chartData?.y) return { min: 10, max: 13 };
+
+    // 过滤掉0值，只考虑有效数据的最小值和最大值
+    const dataValues = chartData.y.filter((val: number) => val > 0);
+    if (dataValues.length === 0) return { min: 10, max: 13 };
+
+    const actualMin = Math.min(...dataValues);
+    const actualMax = Math.max(...dataValues);
+    const range = actualMax - actualMin;
+    const padding = Math.max(range * 0.05, 0.001); // 减少padding到5%
+
+    return {
+      min: (actualMin - padding).toFixed(5),
+      max: (actualMax + padding).toFixed(5)
+    };
+  };
+
+  // 生成图表配置选项
+  const getChartOption = () => {
+    // 确保chartData存在
+    if (!chartData || !chartData.x || !chartData.y) {
+      console.warn('Chart data is not ready');
+      return null;
+    }
+
+    console.log('chartData ===================>>>>>>>>>>> ', chartData);
+    const yAxisRange = getYAxisRange();
+
+    console.log('yAxisRange ===================>>>>>>>>>>> ', yAxisRange);
+
+    console.log('chartData.x ===================>>>>>>>>>>> ', chartData.x);
+    return {
       grid: {
         left: 0,
         right: 0,
-        top: 0,
+        top: 10,
         bottom: 0,
         containLabel: true,
       },
@@ -59,8 +87,11 @@ export function ProductTrendChart({ data, height }: { data?: any; height?: numbe
         axisTick: { show: false },
       },
       yAxis: {
-        type: 'category',
-        data: chartData.y,
+        type: 'value',
+        min: yAxisRange.min,
+        max: yAxisRange.max,
+        splitNumber: 8, // 分割数量
+        minInterval: 0.0005, // 设置最小间隔
         position: 'right',
         axisLine: { show: false },
         axisTick: { show: false },
@@ -78,8 +109,8 @@ export function ProductTrendChart({ data, height }: { data?: any; height?: numbe
       },
       series: [
         {
-          name: '黑线',
-          data: chartData.black,
+          name: tooltipTitle,
+          data: chartData.y,
           type: 'line',
           showSymbol: false,
           lineStyle: { color: '#000', width: 2 },
@@ -89,64 +120,41 @@ export function ProductTrendChart({ data, height }: { data?: any; height?: numbe
         },
       ],
       tooltip: {
-        trigger: 'axis',
-        backgroundColor: '#000',
-        borderRadius: 8,
-        padding: [0, 6],
-        textStyle: { color: '#fff', fontSize: 14, fontWeight: 700 },
-        formatter: (params: any) => {
-          const price = params[0]?.data ?? '';
-          return `<Box style="text-align:center;">
-            <Text style="font-family:'Inter';font-style:normal;font-weight:400;font-size:5.67469px;line-height:150%;display:flex;align-items:center;color:#FFFFFF;">${tooltipTitle}</Text>
-            <Text style="font-family:'Inter';font-style:normal;font-weight:400;font-size:9.22136px;line-height:150%;display:flex;align-items:center;color:#FFFFFF;">${price}</Text>
-          </Box>`;
+        trigger: 'axis', // 触发类型：'item'、'axis'、'none'
+        backgroundColor: '#000', // 背景色
+        padding: 10, // 内边距
+        textStyle: {
+          color: '#fff', // 文字颜色
+          fontSize: 14, // 文字大小
+          fontWeight: 'bold' // 文字粗细
         },
-        // axisPointer: {
-        //   type: 'cross',
-        //   crossStyle: { color: '#000', type: 'dashed', width: 1 },
-        //   lineStyle: { color: '#000', type: 'dashed', width: 1 },
-        // },
+        formatter: '{a0} <br /> {c0}',
       },
-    };
 
-    if (skiaRef.current) {
-      const chart = echarts.init(skiaRef.current, 'light', {
-        renderer: 'svg',
-        width: chartWidth,
-        height: 180,
-      });
-      chart.setOption(option);
-    }
+    };
   };
 
-  useEffect(() => {
-    if (chartWidth > 0) {
-      initChart(chartWidth);
-    }
-
-    return () => {
-      if (skiaRef.current) {
-        const chart = echarts?.getInstanceByDom?.(skiaRef?.current);
-        if (chart) {
-          chart.dispose();
-        }
-      }
-    };
-  }, [chartWidth]);
-
-
+  const chartOption = getChartOption();
 
   return (
     <View
       ref={containerRef}
-      style={{ width: '100%', height: 180 }}
+      style={{ width: '100%', height: height || 180 }}
       onLayout={(event) => {
         let { width } = event.nativeEvent.layout;
-        width += 40
+        width += 40;
         setChartWidth(width);
       }}
     >
-      {chartWidth > 0 && <SkiaChart ref={skiaRef} />}
+      {chartWidth > 0 && chartOption && (
+        <ECharts
+          ref={chartRef}
+          option={chartOption}
+          backgroundColor="rgba(255, 255, 255, 0)"
+          height={height || 180}
+        />
+      )}
     </View>
   );
 }
+

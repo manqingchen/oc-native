@@ -12,7 +12,7 @@ import { ProductTrendChart } from "@/components/chart/product.echarts";
 export const MyAssetsInfo = () => {
   const { t } = useTranslation();
   const [isShowChart, setIsShowChart] = useState(false);
-  const { myAssetsTop } = useAssets();
+  const { myAssetsTop: MyAssetsTopIcon } = useAssets();
   const dwm = useMyAssetsStore(state => state.dwm);
   const {language, token} = useUserStore();
   const { data: myAssets, getMyAssetsInfo } = useMyAssetsInfo({
@@ -49,21 +49,21 @@ export const MyAssetsInfo = () => {
         </Box>
         {isShowChart ? (
           <Pressable onPress={() => setIsShowChart(false)}>
-            <Image source={myAssetsTop} />
+            <MyAssetsTopIcon />
           </Pressable>
         ) : (
           <Pressable onPress={() => setIsShowChart(true)}>
-            <Box className="w-[77px] h-[25px] absolute right-9.5 top-12">
-              {/* <ProductLineOnlyChart height={24} data={userAssetsList} /> */}
+            <Box className="w-[77px] h-[25px] absolute right-0 top-0 ">
+              <ProductLineOnlyChart height={24} data={userAssetsList} />
             </Box>
           </Pressable>
         )}
       </Box>
-      {/* {isShowChart && (
+      {isShowChart && (
         <Box className="">
           <ProductTrendChart data={userAssetsList} />
         </Box>
-      )} */}
+      )}
 
       <Box className="flex flex-row justify-between">
         <Box className="flex flex-col gap-[3px] flex-1">
