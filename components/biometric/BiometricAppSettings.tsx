@@ -1,15 +1,11 @@
 import React, { useState, useCallback } from 'react';
-import { Alert } from 'react-native';
-import { 
-  Box, 
-  Text, 
-  Switch, 
-  Button, 
+import { Alert, Switch } from 'react-native';
+import {
+  Box,
+  Text,
+  Button,
   ButtonText,
-  Slider,
-  SliderTrack,
-  SliderFilledTrack,
-  SliderThumb,
+  Pressable,
 } from '@/components/ui';
 import { useBiometricStore } from '@/stores/biometricStore';
 import { useBiometricAuth } from '@/hooks/useBiometricAuth';
@@ -176,19 +172,52 @@ export const BiometricAppSettings: React.FC = () => {
             <Text className="text-sm text-gray-600 mb-4">
               {t('biometric.settings.authTimeoutDesc', 'Time before requiring re-authentication')}: {authTimeoutMinutes} {t('biometric.settings.minutes', 'minutes')}
             </Text>
-            <Slider
-              value={authTimeoutMinutes}
-              onValueChange={(value) => setAuthTimeout(value[0])}
-              min={1}
-              max={60}
-              step={1}
-              className="w-full"
-            >
-              <SliderTrack>
-                <SliderFilledTrack />
-              </SliderTrack>
-              <SliderThumb />
-            </Slider>
+
+            {/* 数字选择器 */}
+            <Box className="flex-row items-center justify-between">
+              <Pressable
+                onPress={() => setAuthTimeout(Math.max(1, authTimeoutMinutes - 1))}
+                className="w-10 h-10 bg-gray-200 rounded-full items-center justify-center"
+              >
+                <Text className="text-lg font-bold text-gray-700">-</Text>
+              </Pressable>
+
+              <Box className="flex-1 mx-4">
+                <Text className="text-center text-lg font-semibold text-gray-900">
+                  {authTimeoutMinutes} {t('biometric.settings.minutes', 'minutes')}
+                </Text>
+              </Box>
+
+              <Pressable
+                onPress={() => setAuthTimeout(Math.min(60, authTimeoutMinutes + 1))}
+                className="w-10 h-10 bg-gray-200 rounded-full items-center justify-center"
+              >
+                <Text className="text-lg font-bold text-gray-700">+</Text>
+              </Pressable>
+            </Box>
+
+            {/* 快速选择按钮 */}
+            <Box className="flex-row gap-2 mt-3">
+              {[1, 5, 10, 15, 30, 60].map((minutes) => (
+                <Pressable
+                  key={minutes}
+                  onPress={() => setAuthTimeout(minutes)}
+                  className={`px-3 py-2 rounded-lg ${
+                    authTimeoutMinutes === minutes
+                      ? 'bg-blue-500'
+                      : 'bg-gray-100'
+                  }`}
+                >
+                  <Text className={`text-sm font-medium ${
+                    authTimeoutMinutes === minutes
+                      ? 'text-white'
+                      : 'text-gray-700'
+                  }`}>
+                    {minutes}m
+                  </Text>
+                </Pressable>
+              ))}
+            </Box>
           </Box>
         )}
       </Box>
