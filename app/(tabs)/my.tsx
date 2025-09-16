@@ -17,6 +17,7 @@ import { useWalletBalance } from "@/hooks/useWalletBalance";
 import { useWalletStore } from "@/stores/wallet.store";
 import { supportWallets } from '@/lib/config'
 import { showToast } from "@/utils/toast";
+import { router } from "expo-router";
 
 export default function My() {
   const { myAssetsRight: MyAssetsRightIcon } = useAssets();
@@ -90,6 +91,12 @@ export default function My() {
         <Box className="mt-4">
           <Text className="mb-2.5">🔐 安全设置</Text>
           <Wrapper>
+             <Button
+                  onPress={() => router.push('/push-test')}
+                  className="bg-blue-500"
+                >
+                  <ButtonText className="text-white">🔔 推送测试</ButtonText>
+                </Button>
             <Item
               title="应用锁定设置"
               href="/biometric-app-settings"

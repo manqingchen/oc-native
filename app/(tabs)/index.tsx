@@ -121,25 +121,6 @@ export default function Index() {
 
             </Box>
 
-            {/* 开发测试按钮 */}
-            {__DEV__ && (
-              <Box className="mx-4 mt-8 gap-3">
-                <Button
-                  onPress={() => router.push('/push-test')}
-                  className="bg-blue-500"
-                >
-                  <ButtonText className="text-white">🔔 推送测试</ButtonText>
-                </Button>
-                <Button
-                  onPress={() => router.push('/biometric-demo')}
-                  className="bg-green-500"
-                >
-                  <ButtonText className="text-white">🔐 生物识别演示</ButtonText>
-                </Button>
-              </Box>
-            )}
-
-            <BottomLogo className="mt-[100px] mb-[143px]" />
           </Box>
           <Marquee />
         </LinearGradient>

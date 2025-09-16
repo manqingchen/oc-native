@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
-import { Box, Text, Button, ButtonText, Spinner } from '@/components/ui';
+import { Box, Text, Button, ButtonText } from '@/components/ui';
 import { useBiometricAuth } from '@/hooks/useBiometricAuth';
 import { useBiometricLogin } from '@/hooks/useBiometricLogin';
 import { useBiometricAppLock } from '@/stores/biometricStore';
@@ -22,7 +22,7 @@ type GuardState =
   | 'unavailable';  // 设备不支持
 
 export const BiometricGuard: React.FC<BiometricGuardProps> = ({ children }) => {
-  const { t } = useTranslation();
+  const { t, ready } = useTranslation();
   const [guardState, setGuardState] = useState<GuardState>('checking');
   const [error, setError] = useState<string>('');
   const [retryCount, setRetryCount] = useState(0);
@@ -31,6 +31,15 @@ export const BiometricGuard: React.FC<BiometricGuardProps> = ({ children }) => {
   const { isSupported, isEnabled, authenticate } = useBiometricAuth();
   const { tryAutoLogin } = useBiometricLogin();
   const { isEnabled: isAppLockEnabled, isAuthRequired, isAuthExpired, updateAuthTime, settings } = useBiometricAppLock();
+
+  // 如果 i18n 还没有准备好，显示加载状态
+  if (!ready) {
+    return (
+      <Box className="flex-1 justify-center items-center bg-white">
+        <Text>Loading...</Text>
+      </Box>
+    );
+  }
 
   // 监听应用状态变化
   useEffect(() => {
@@ -41,7 +50,7 @@ export const BiometricGuard: React.FC<BiometricGuardProps> = ({ children }) => {
 
         // 检查是否需要重新认证
         if (isAppLockEnabled && settings.requireOnBackground &&
-            (isAuthExpired() || guardState === 'authenticated')) {
+            (isAuthExpired || guardState === 'authenticated')) {
           setGuardState('checking');
           performBiometricCheck();
         }
@@ -220,13 +229,6 @@ const BiometricGuardScreen: React.FC<BiometricGuardScreenProps> = ({
             {content.subtitle}
           </Text>
         </Box>
-
-        {/* 加载指示器 */}
-        {content.showSpinner && (
-          <Box className="mb-8">
-            <Spinner size="large" />
-          </Box>
-        )}
 
         {/* 操作按钮 */}
         {state === 'failed' && (
