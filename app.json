@@ -16,7 +16,9 @@
       "usesAppleSignIn": true,
       "supportsTablet": true,
       "bundleIdentifier": "dev.privy.example",
-      "associatedDomains": ["webcredentials:<your-associated-domain>"],
+      "associatedDomains": [
+        "webcredentials:<your-associated-domain>"
+      ],
       "infoPlist": {
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": true
@@ -56,6 +58,12 @@
       ],
       "expo-font",
       [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID for secure authentication."
+        }
+      ],
+      [
         "expo-notifications",
         {
           "icon": "./assets/images/icon.png",
@@ -63,14 +71,15 @@
           "sounds": []
         }
       ],
-       [
+      [
         "expo-splash-screen",
         {
           "backgroundColor": "#ffffff",
           "image": "./assets/images/landing.png",
           "resizeMode": "cover"
         }
-      ]
+      ],
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true

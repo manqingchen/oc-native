@@ -19,6 +19,7 @@ import { HomeBar } from "@/components/home/home.bar";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { useModal } from '@/hooks/modal.hook'
+import { Pressable } from 'react-native'
 
 export default function Index() {
   const { t } = useTranslation();
@@ -122,12 +123,18 @@ export default function Index() {
 
             {/* 开发测试按钮 */}
             {__DEV__ && (
-              <Box className="mx-4 mt-8">
+              <Box className="mx-4 mt-8 gap-3">
                 <Button
                   onPress={() => router.push('/push-test')}
                   className="bg-blue-500"
                 >
                   <ButtonText className="text-white">🔔 推送测试</ButtonText>
+                </Button>
+                <Button
+                  onPress={() => router.push('/biometric-demo')}
+                  className="bg-green-500"
+                >
+                  <ButtonText className="text-white">🔐 生物识别演示</ButtonText>
                 </Button>
               </Box>
             )}

@@ -87,6 +87,16 @@ export default function My() {
             />
           </Wrapper>
         </Box>
+        <Box className="mt-4">
+          <Text className="mb-2.5">🔐 开发工具</Text>
+          <Wrapper>
+            <Item
+              title="生物识别认证演示"
+              href="/biometric-demo"
+              icon={<MyAssetsRightIcon />}
+            />
+          </Wrapper>
+        </Box>
         <Box className="flex items-center mt-5 mb-5">
           <Text className="font-inter text-[15px] leading-[24px] tracking-[0.2px] text-right font-medium text-black">
             Stay Connected
