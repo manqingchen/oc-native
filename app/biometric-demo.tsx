@@ -10,6 +10,7 @@ import {
 } from '@/components/ui';
 import { BiometricAuthButton, BiometricStatusIndicator } from '@/components/biometric/BiometricAuthButton';
 import { BiometricSettings } from '@/components/biometric/BiometricSettings';
+import { BiometricAppSettings } from '@/components/biometric/BiometricAppSettings';
 import { useBiometricAuth, type StoredCredentials } from '@/hooks/useBiometricAuth';
 import { useTranslation } from 'react-i18next';
 import { usePhantomWallet } from '@/stores/phantomWalletStore';
@@ -247,6 +248,11 @@ export default function BiometricDemo() {
               userCredentials={demoCredentials}
               onSettingsChange={handleSettingsChange}
             />
+          </Box>
+
+          {/* 应用锁定设置 */}
+          <Box className="mb-6">
+            <BiometricAppSettings />
           </Box>
 
           {/* 操作结果 */}

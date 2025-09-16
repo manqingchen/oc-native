@@ -88,8 +88,13 @@ export default function My() {
           </Wrapper>
         </Box>
         <Box className="mt-4">
-          <Text className="mb-2.5">🔐 开发工具</Text>
+          <Text className="mb-2.5">🔐 安全设置</Text>
           <Wrapper>
+            <Item
+              title="应用锁定设置"
+              href="/biometric-app-settings"
+              icon={<MyAssetsRightIcon />}
+            />
             <Item
               title="生物识别认证演示"
               href="/biometric-demo"

@@ -32,6 +32,7 @@ import { useModal } from '@/hooks/modal.hook';
 import { useInit } from '@/hooks/useInit';
 import { BaseModal } from '@/components/modal/base.modal';
 import { router } from 'expo-router';
+import { BiometricGuard } from '@/components/biometric/BiometricGuard';
 
 export default function RootLayout() {
   const { isOpen, modalType, close } = useModal();
@@ -157,19 +158,24 @@ export default function RootLayout() {
                 className='bg-white'
               >
                 <Box className="flex-1">
-                  {/* 主要内容区域 */}
-                  <ContentWrapper {...contentWrapperProps}>
-                    <Stack screenOptions={{ headerShown: false }}>
-                      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                      <Stack.Screen name="productDetail" options={{ headerShown: false }} />
-                      <Stack.Screen name="onchainDocs" options={{ headerShown: false }} />
-                      <Stack.Screen name="system-message" options={{ headerShown: false }} />
-                      <Stack.Screen name="trade" options={{ headerShown: false }} />
-                      <Stack.Screen name="transaction" options={{ headerShown: false }} />
-                      <Stack.Screen name="product-activities" options={{ headerShown: false }} />
-                      <Stack.Screen name="push-test" options={{ headerShown: false }} />
-                    </Stack>
-                  </ContentWrapper>
+                  {/* 生物识别守卫 */}
+                  <BiometricGuard>
+                    {/* 主要内容区域 */}
+                    <ContentWrapper {...contentWrapperProps}>
+                      <Stack screenOptions={{ headerShown: false }}>
+                        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                        <Stack.Screen name="productDetail" options={{ headerShown: false }} />
+                        <Stack.Screen name="onchainDocs" options={{ headerShown: false }} />
+                        <Stack.Screen name="system-message" options={{ headerShown: false }} />
+                        <Stack.Screen name="trade" options={{ headerShown: false }} />
+                        <Stack.Screen name="transaction" options={{ headerShown: false }} />
+                        <Stack.Screen name="product-activities" options={{ headerShown: false }} />
+                        <Stack.Screen name="push-test" options={{ headerShown: false }} />
+                        <Stack.Screen name="biometric-demo" options={{ headerShown: false }} />
+                        <Stack.Screen name="biometric-app-settings" options={{ headerShown: false }} />
+                      </Stack>
+                    </ContentWrapper>
+                  </BiometricGuard>
                 </Box>
               </SafeAreaView>
             </View>

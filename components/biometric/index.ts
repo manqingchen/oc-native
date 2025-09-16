@@ -8,6 +8,8 @@ export { useBiometricLogin } from '@/hooks/useBiometricLogin';
 export { BiometricAuthButton, BiometricStatusIndicator } from './BiometricAuthButton';
 export { BiometricLoginButton, QuickBiometricLogin } from './BiometricLoginButton';
 export { BiometricSettings } from './BiometricSettings';
+export { BiometricGuard } from './BiometricGuard';
+export { BiometricAppSettings } from './BiometricAppSettings';
 
 // Types
 export type {
