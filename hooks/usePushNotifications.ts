@@ -1,6 +1,30 @@
 import { useState, useEffect, useCallback } from 'react';
 import { pushNotificationService, PushNotificationConfig } from '@/services/push-notification.service';
 import { useUserStore } from '@/api/request';
+import i18n from '@/messages/i18n';
+import { setPushToken } from '@/api/user';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Persistent device UUID for push registration
+const DEVICE_UUID_KEY = 'oc_device_uuid';
+const generateUUID = (): string => {
+  // Simple RFC4122 version 4 UUID generator
+  const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).slice(1);
+  return `${s4()}${s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`;
+};
+const getOrCreateDeviceUUID = async (): Promise<string> => {
+  try {
+    const existing = await AsyncStorage.getItem(DEVICE_UUID_KEY);
+    if (existing) return existing;
+    const created = generateUUID();
+    await AsyncStorage.setItem(DEVICE_UUID_KEY, created);
+    return created;
+  } catch {
+    // Fallback: non-persistent UUID if storage fails
+    return generateUUID();
+  }
+};
+
 
 export interface PushNotificationState {
   isInitialized: boolean;
@@ -72,7 +96,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       });
 
       // 如果有令牌且用户已登录，发送到后端
-      if (token && userStore.user) {
+      if (token && userStore.token) {
         await sendTokenToBackend(token);
       }
 
@@ -85,7 +109,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       });
       console.error('❌ 推送Hook初始化失败:', error);
     }
-  }, [state.isInitialized, userStore.user]);
+  }, [state.isInitialized, userStore.token]);
 
   /**
    * 请求推送权限
@@ -95,7 +119,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
 
     try {
       const granted = await pushNotificationService.requestPermissions();
-      
+
       updateState({
         hasPermission: granted,
         isLoading: false,
@@ -107,7 +131,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
         updateState({ pushToken: token });
 
         // 发送令牌到后端
-        if (token && userStore.user) {
+        if (token && userStore.token) {
           await sendTokenToBackend(token);
         }
       }
@@ -122,7 +146,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       console.error('权限请求失败:', error);
       return false;
     }
-  }, [userStore.user]);
+  }, [userStore.token]);
 
   /**
    * 发送测试通知
@@ -151,7 +175,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       });
 
       // 发送新令牌到后端
-      if (token && userStore.user) {
+      if (token && userStore.token) {
         await sendTokenToBackend(token);
       }
 
@@ -165,7 +189,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       console.error('令牌刷新失败:', error);
       return null;
     }
-  }, [userStore.user]);
+  }, [userStore.token]);
 
   /**
    * 清除通知徽章
@@ -190,46 +214,46 @@ export function usePushNotifications(): UsePushNotificationsReturn {
    */
   const sendTokenToBackend = useCallback(async (token: string) => {
     try {
-      // TODO: 实现发送令牌到后端的API调用
-      // 这里需要根据你的后端API进行实现
-      console.log('📤 准备发送推送令牌到后端:', token);
-      
-      // 示例API调用（需要根据实际后端接口调整）
-      /*
-      const response = await fetch('/api/v1/push/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userStore.token}`,
-        },
-        body: JSON.stringify({
-          expoPushToken: token,
-          deviceId: 'device_unique_id', // 需要获取设备唯一ID
-          platform: Platform.OS,
-        }),
-      });
+      if (!userStore.token) return; // 未登录不发送
 
-      if (!response.ok) {
-        throw new Error('发送令牌到后端失败');
-      }
-      */
+      // 使用持久化的设备UUID作为 deviceName
+      const deviceName = await getOrCreateDeviceUUID();
+
+      const language = i18n.language || 'en';
+
+      console.log('📤 发送推送令牌到后端:', { token, deviceName, language });
+
+      await setPushToken({
+        deviceToken: token,
+        deviceName,
+        language,
+      });
 
       console.log('✅ 推送令牌已发送到后端');
     } catch (error) {
       console.error('❌ 发送推送令牌到后端失败:', error);
-      // 这里可以选择是否抛出错误，或者静默处理
+      // 静默处理，不阻塞主流程
     }
-  }, [userStore.user, userStore.token]);
+  }, [userStore.token]);
 
   /**
    * 用户登录状态变化时的处理
    */
   useEffect(() => {
-    if (userStore.user && state.pushToken && !state.error) {
+    if (userStore.token && state.pushToken && !state.error) {
       // 用户登录且有推送令牌时，发送到后端
       sendTokenToBackend(state.pushToken);
     }
-  }, [userStore.user, state.pushToken, state.error, sendTokenToBackend]);
+  }, [userStore.token, state.pushToken, state.error, sendTokenToBackend]);
+  /**
+   * 语言切换后，同步推送令牌（如果已登录且有令牌）
+   */
+  useEffect(() => {
+    if (userStore.token && state.pushToken) {
+      sendTokenToBackend(state.pushToken);
+    }
+  }, [userStore.token, state.pushToken, sendTokenToBackend, i18n.language]);
+
 
   /**
    * 组件卸载时清理
@@ -262,7 +286,7 @@ export function usePushNotificationStatus() {
     const checkStatus = async () => {
       const status = await pushNotificationService.getPermissionStatus();
       setHasPermission(status === 'granted');
-      
+
       if (status === 'granted') {
         const token = pushNotificationService.getCurrentToken();
         setPushToken(token);

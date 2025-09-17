@@ -6,8 +6,6 @@ import { useBiometricLogin } from '@/hooks/useBiometricLogin';
 import { useBiometricAppLock } from '@/stores/biometricStore';
 import { useTranslation } from 'react-i18next';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Image } from 'react-native';
-import { useAssets } from '@/hooks/useAsset';
 
 interface BiometricGuardProps {
   children: React.ReactNode;
@@ -71,6 +69,12 @@ export const BiometricGuard: React.FC<BiometricGuardProps> = ({ children }) => {
       // 检查是否启用了应用锁定
       if (!isAppLockEnabled) {
         setGuardState('disabled');
+        return;
+      }
+
+      // 检查是否需要认证（启动时或后台返回时）
+      if (!isAuthRequired) {
+        setGuardState('authenticated');
         return;
       }
 

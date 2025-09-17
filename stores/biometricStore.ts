@@ -68,21 +68,34 @@ export const useBiometricStore = create<BiometricStoreState>()(
       // 检查方法
       isAuthRequired: () => {
         const state = get();
-        return state.isAppLockEnabled && (
-          state.requireAuthOnLaunch || 
-          state.requireAuthOnBackground
-        );
+        if (!state.isAppLockEnabled) {
+          return false;
+        }
+
+        // 如果是首次启动（lastAuthTime === 0）且启用了启动时认证
+        if (state.lastAuthTime === 0 && state.requireAuthOnLaunch) {
+          return true;
+        }
+
+        // 如果启用了后台返回认证，检查是否过期
+        if (state.requireAuthOnBackground && state.lastAuthTime > 0) {
+          const timeoutMs = state.authTimeoutMinutes * 60 * 1000;
+          const timeSinceAuth = Date.now() - state.lastAuthTime;
+          return timeSinceAuth > timeoutMs;
+        }
+
+        return false;
       },
 
       isAuthExpired: () => {
         const state = get();
         if (!state.isAppLockEnabled || state.lastAuthTime === 0) {
-          return false;
+          return state.requireAuthOnLaunch; // 如果是首次启动且需要启动认证，则认为已过期
         }
-        
+
         const timeoutMs = state.authTimeoutMinutes * 60 * 1000;
         const timeSinceAuth = Date.now() - state.lastAuthTime;
-        
+
         return timeSinceAuth > timeoutMs;
       },
 
