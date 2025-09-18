@@ -4,7 +4,8 @@ import { useUserStore } from '@/api/request';
 import i18n from '@/messages/i18n';
 import { setPushToken } from '@/api/user';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { Alert } from 'react-native';
+import * as Clipboard from "expo-clipboard";
 // Persistent device UUID for push registration
 const DEVICE_UUID_KEY = 'oc_device_uuid';
 const generateUUID = (): string => {
@@ -87,6 +88,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
 
       // 获取推送令牌
       const token = pushNotificationService.getCurrentToken();
+      console.log('token ===================>>>>>>>>>>> ', token);
 
       updateState({
         isInitialized: true,
@@ -223,12 +225,23 @@ export function usePushNotifications(): UsePushNotificationsReturn {
 
       console.log('📤 发送推送令牌到后端:', { token, deviceName, language });
 
-      await setPushToken({
+      const data = await setPushToken({
         deviceToken: token,
         deviceName,
         language,
       });
-
+      Alert.alert(
+        '推送令牌',
+        JSON.stringify(data, null, 2),
+        [
+          { text: '关闭', style: 'cancel' },
+          {
+            text: '复制', onPress: async () => {
+              await Clipboard.setStringAsync(JSON.stringify(data));
+            }
+          }
+        ]
+      );
       console.log('✅ 推送令牌已发送到后端');
     } catch (error) {
       console.error('❌ 发送推送令牌到后端失败:', error);
