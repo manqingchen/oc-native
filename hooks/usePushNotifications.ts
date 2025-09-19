@@ -6,6 +6,8 @@ import { setPushToken } from '@/api/user';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 import * as Clipboard from "expo-clipboard";
+import { usePushNotificationStore } from '@/stores/pushNotification.store';
+
 // Persistent device UUID for push registration
 const DEVICE_UUID_KEY = 'oc_device_uuid';
 const generateUUID = (): string => {
@@ -49,30 +51,26 @@ export interface UsePushNotificationsReturn extends PushNotificationState {
  * 提供推送通知的完整功能封装
  */
 export function usePushNotifications(): UsePushNotificationsReturn {
-  const [state, setState] = useState<PushNotificationState>({
-    isInitialized: false,
-    hasPermission: false,
-    pushToken: null,
-    isLoading: false,
-    error: null,
-  });
+  const { isInitialized, hasPermission, pushToken, isLoading, error, update } = usePushNotificationStore();
 
-  // 获取用户信息，用于后续发送令牌到后端
-  const userStore = useUserStore();
+  // 仅使用 selector 订阅，避免闭包问题
+  const authToken = useUserStore(state => state.token);
+  // console.log('authToken in usePushNotifications', authToken)
 
   /**
    * 更新状态的辅助函数
    */
   const updateState = useCallback((updates: Partial<PushNotificationState>) => {
-    setState(prev => ({ ...prev, ...updates }));
-  }, []);
+    update(updates);
+  }, [update]);
 
   /**
    * 初始化推送服务
    */
   const initializePush = useCallback(async () => {
-    if (state.isInitialized) {
+    if (isInitialized) {
       console.log('推送服务已经初始化');
+      console.log('authToken', authToken)
       return;
     }
 
@@ -98,7 +96,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       });
 
       // 如果有令牌且用户已登录，发送到后端
-      if (token && userStore.token) {
+      if (token && authToken) {
         await sendTokenToBackend(token);
       }
 
@@ -111,7 +109,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       });
       console.error('❌ 推送Hook初始化失败:', error);
     }
-  }, [state.isInitialized, userStore.token]);
+  }, [isInitialized, authToken]);
 
   /**
    * 请求推送权限
@@ -133,7 +131,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
         updateState({ pushToken: token });
 
         // 发送令牌到后端
-        if (token && userStore.token) {
+        if (token && authToken) {
           await sendTokenToBackend(token);
         }
       }
@@ -148,7 +146,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       console.error('权限请求失败:', error);
       return false;
     }
-  }, [userStore.token]);
+  }, [authToken]);
 
   /**
    * 发送测试通知
@@ -177,7 +175,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       });
 
       // 发送新令牌到后端
-      if (token && userStore.token) {
+      if (token && authToken) {
         await sendTokenToBackend(token);
       }
 
@@ -191,7 +189,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       console.error('令牌刷新失败:', error);
       return null;
     }
-  }, [userStore.token]);
+  }, [authToken]);
 
   /**
    * 清除通知徽章
@@ -214,19 +212,19 @@ export function usePushNotifications(): UsePushNotificationsReturn {
   /**
    * 发送推送令牌到后端
    */
-  const sendTokenToBackend = useCallback(async (token: string) => {
+  const sendTokenToBackend = useCallback(async (deviceToken: string) => {
     try {
-      if (!userStore.token) return; // 未登录不发送
+      if (!authToken) return; // 未登录不发送
 
       // 使用持久化的设备UUID作为 deviceName
       const deviceName = await getOrCreateDeviceUUID();
 
       const language = i18n.language || 'en';
 
-      console.log('📤 发送推送令牌到后端:', { token, deviceName, language });
+      console.log('📤 发送推送令牌到后端:', { token: deviceToken, deviceName, language });
 
       const data = await setPushToken({
-        deviceToken: token,
+        deviceToken,
         deviceName,
         language,
       });
@@ -247,26 +245,31 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       console.error('❌ 发送推送令牌到后端失败:', error);
       // 静默处理，不阻塞主流程
     }
-  }, [userStore.token]);
+  }, [authToken]);
 
   /**
    * 用户登录状态变化时的处理
+   * 1) 监听 pushToken 变化（在已有登录态下）
+   * 2) 额外订阅 userStore.token 变化，确保登录后一定触发
    */
   useEffect(() => {
-    if (userStore.token && state.pushToken && !state.error) {
-      // 用户登录且有推送令牌时，发送到后端
-      sendTokenToBackend(state.pushToken);
+    // pushToken 变化时，如果已经登录则发送
+    console.log('用户登录状态变化时的处理', authToken,'pushToken', pushToken, !error)
+    if (authToken && pushToken && !error) {
+      sendTokenToBackend(pushToken);
     }
-  }, [userStore.token, state.pushToken, state.error, sendTokenToBackend]);
-  /**
-   * 语言切换后，同步推送令牌（如果已登录且有令牌）
-   */
-  useEffect(() => {
-    if (userStore.token && state.pushToken) {
-      sendTokenToBackend(state.pushToken);
-    }
-  }, [userStore.token, state.pushToken, sendTokenToBackend, i18n.language]);
+  }, [authToken, pushToken, error, sendTokenToBackend]);
 
+  useEffect(() => {
+    // 订阅 token 变化，避免某些场景下 React 依赖未触发的问题
+    const unsubscribe = useUserStore.subscribe((state) => {
+      const newToken = state.token;
+      if (newToken && pushToken && !error) {
+        sendTokenToBackend(pushToken);
+      }
+    });
+    return unsubscribe;
+  }, [pushToken, error, sendTokenToBackend]);
 
   /**
    * 组件卸载时清理
@@ -278,7 +281,11 @@ export function usePushNotifications(): UsePushNotificationsReturn {
   }, []);
 
   return {
-    ...state,
+    isInitialized,
+    hasPermission,
+    pushToken,
+    isLoading,
+    error,
     initializePush,
     requestPermissions,
     sendTestNotification,

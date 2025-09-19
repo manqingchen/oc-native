@@ -8,12 +8,14 @@ import { GestureResponderEvent, Image, Pressable } from "react-native";
 import { Button, ButtonText, Popover, PopoverBackdrop, PopoverContent } from "../ui";
 import { useAssets } from "@/hooks/useAsset";
 import { usePhantomWallet } from "@/stores/phantomWalletStore";
-
+import { useUserStore } from '@/api/request';
+import { useLoginStore } from '@/stores/login.store';
 export function SettingPopover() {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
   const { setting: SettingIcon } = useAssets();
   const { wallet, setWallet } = usePhantomWallet()
+  const { setIsLogin } = useLoginStore()
   const currentLanguage = i18n.language;
   console.log('wallet in setting ===================>>>>>>>>>>> ', wallet);
 
@@ -84,16 +86,11 @@ export function SettingPopover() {
         <Button
           className={twClassnames("flex-1 bg-transparent")}
           onPress={async () => {
+            setWallet(undefined);
+            setIsLogin(false)
             setIsOpen(false);
             clearToken();
-            try {
-              if (wallet?.disconnect) {
-                await wallet.disconnect();
-              }
-            } finally {
-              // 确保清理本地钱包状态
-              setWallet(undefined);
-            }
+            // await wallet.disconnect();
           }}
         >
           <ButtonText

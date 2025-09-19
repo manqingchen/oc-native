@@ -10,6 +10,7 @@ export function WalletButton() {
   const { open } = useModal();
   const { wallet } = usePhantomWallet()
 
+  console.log('wallet info in wallet button ===================>>>>>>>>>>> ', wallet);
   const { address, isConnected } = wallet || {}
 
   if (isConnected && address) {

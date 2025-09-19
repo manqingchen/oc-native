@@ -14,12 +14,13 @@ import { Marquee } from "@/components/marquee";
 import { BottomLogo } from "@/components/home/bottom.logo";
 import { ProductCard } from "@/components/product/product.card";
 import { useProductList } from "@/hooks/useProducts";
-import { useEffect } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { HomeBar } from "@/components/home/home.bar";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { useModal } from '@/hooks/modal.hook'
 import { Pressable } from 'react-native'
+import VideoLightbox from "@/components/video/VideoLightbox";
 
 export default function Index() {
   const { t } = useTranslation();
@@ -30,12 +31,22 @@ export default function Index() {
   const {
     productList,
     getProductList,
+
   } = useProductList({ limit: 100 });
 
   // 组件挂载时获取产品列表
   useEffect(() => {
     getProductList();
   }, []);
+  const [openVideo, setOpenVideo] = useState(false);
+  const [videoIndex, setVideoIndex] = useState(0);
+  const videoItems = useMemo(() => ([
+    { uri: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+    { uri: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
+    { uri: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4' },
+    { uri: 'https://media.w3.org/2010/05/sintel/trailer.mp4' },
+    { uri: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4' },
+  ]), []);
   return (
     <ScrollView >
       <ImageBackground source={require('@/assets/images/h5-bg.png')} resizeMode="cover" >
@@ -72,6 +83,12 @@ export default function Index() {
                 </ButtonText>
                 <ButtonIcon size='md' as={ArrowRightIcon} className="ml-3" />
               </Button>
+              <Pressable onPress={() => { setVideoIndex(0); setOpenVideo(true); }}
+                className={twClassnames("mt-3 h-10 w-[160px] rounded bg-black items-center justify-center")}
+              >
+                <Text className="text-white">查看视频Demo</Text>
+              </Pressable>
+
             </Box>
           </Box>
         </Box>
@@ -79,6 +96,7 @@ export default function Index() {
       <Box>
         <LinearGradient
           colors={["#FFD0C7", "#FFF7D9", "#EFEFEF"]}
+
           locations={[0.0769, 0.3381, 0.8611]}
           start={{ x: 0.5, y: 1 }} // 从底部中心开始
           end={{ x: 0.5, y: 0 }} // 向顶部中心扩散
@@ -126,6 +144,8 @@ export default function Index() {
         </LinearGradient>
         <Footer />
       </Box>
+      <VideoLightbox isOpen={openVideo} onClose={() => setOpenVideo(false)} items={videoItems} initialIndex={videoIndex} />
+
     </ScrollView >
   );
 }

@@ -14,10 +14,12 @@ import { useAssets } from "@/hooks/useAsset";
 import { usePhantomWallet } from '@/stores/phantomWalletStore'
 import { supportWallets } from '@/lib/config'
 import { t } from "i18next";
+import { useLoginStore } from '@/stores/login.store';
 
 export function ConnectWalletModal() {
   const { modalCloseIcon:ModalCloseIcon, nextIcon, modalTitleIcon: ModalTitleIcon } = useAssets();
   const { wallet } = usePhantomWallet()
+  const { setIsLogin } = useLoginStore()
 
   return (
     <ModalContent className="rounded-[20px] p-[15px]">
@@ -37,6 +39,7 @@ export function ConnectWalletModal() {
       </ModalHeader>
       <Pressable
         onPress={(event) => {
+          setIsLogin(true)
           wallet?.connect()
         }}
         style={{

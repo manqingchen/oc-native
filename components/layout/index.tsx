@@ -11,6 +11,7 @@ import bs58 from 'bs58';
 import { useWalletBalance } from "@/hooks/useWalletBalance";
 import { showToast } from '@/utils/toast';
 import { useModal } from '@/hooks/modal.hook';
+import { useLoginStore } from '@/stores/login.store';
 export const Layout = ({ children }) => {
   useWalletBalance()
   const { t } = useTranslation();
@@ -18,7 +19,8 @@ export const Layout = ({ children }) => {
   const currentPath = usePathname()
   const searchParams = useLocalSearchParams()
   const token = useUserStore(s => s.token)
-  const {close} = useModal()
+  const { close } = useModal()
+  const { isLogin } = useLoginStore()
 
   // 构建完整的重定向URI，包含查询参数
   const redirectUri = useMemo(() => {
@@ -60,11 +62,6 @@ export const Layout = ({ children }) => {
       setWallet(phantom);
     }
   }, [phantom, wallet, setWallet]);
-
-  useEffect(() => {
-    // if (phantom.address)
-    //   setWallet(phantom)
-  }, [redirectUri])
 
   useEffect(() => {
     if (phantom.address && !wallet.address) {
@@ -164,7 +161,7 @@ export const Layout = ({ children }) => {
   useEffect(() => {
     console.log('钱包状态:', { address, isConnected, token });
 
-    if (address && isConnected && !token) {
+    if (address && isConnected && !token && isLogin) {
       console.log('🚀 开始自动登录，当前地址:', address);
       login();
     } else if (token && address) {
