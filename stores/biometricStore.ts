@@ -40,8 +40,15 @@ export const useBiometricStore = create<BiometricStoreState>()(
       // 设置方法
       setAppLockEnabled: (enabled: boolean) => {
         set({ isAppLockEnabled: enabled });
-        // 如果禁用应用锁定，也禁用相关设置
-        if (!enabled) {
+        if (enabled) {
+          // 启用应用锁时，强制每次进入/回前台都需认证
+          set({
+            requireAuthOnLaunch: true,
+            requireAuthOnBackground: true,
+            lastAuthTime: 0, // 视为未认证，确保启用后首次立即校验
+          });
+        } else {
+          // 禁用应用锁定时，关闭相关拦截
           set({
             requireAuthOnLaunch: false,
             requireAuthOnBackground: false,
@@ -72,16 +79,14 @@ export const useBiometricStore = create<BiometricStoreState>()(
           return false;
         }
 
-        // 如果是首次启动（lastAuthTime === 0）且启用了启动时认证
-        if (state.lastAuthTime === 0 && state.requireAuthOnLaunch) {
+        // 首次启动（lastAuthTime === 0）必须认证
+        if (state.lastAuthTime === 0) {
           return true;
         }
 
-        // 如果启用了后台返回认证，检查是否过期
+        // 如果启用了后台返回认证，任何一次回到前台都需要重新认证
         if (state.requireAuthOnBackground && state.lastAuthTime > 0) {
-          const timeoutMs = state.authTimeoutMinutes * 60 * 1000;
-          const timeSinceAuth = Date.now() - state.lastAuthTime;
-          return timeSinceAuth > timeoutMs;
+          return true;
         }
 
         return false;
@@ -93,10 +98,11 @@ export const useBiometricStore = create<BiometricStoreState>()(
           return state.requireAuthOnLaunch; // 如果是首次启动且需要启动认证，则认为已过期
         }
 
-        const timeoutMs = state.authTimeoutMinutes * 60 * 1000;
-        const timeSinceAuth = Date.now() - state.lastAuthTime;
-
-        return timeSinceAuth > timeoutMs;
+        // 每次回到前台都视为过期，需重新认证
+        if (state.requireAuthOnBackground) {
+          return true;
+        }
+        return false;
       },
 
       // 重置方法

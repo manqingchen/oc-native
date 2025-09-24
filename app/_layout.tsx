@@ -171,8 +171,8 @@ export default function RootLayout() {
                         <Stack.Screen name="transaction" options={{ headerShown: false }} />
                         <Stack.Screen name="product-activities" options={{ headerShown: false }} />
                         <Stack.Screen name="push-test" options={{ headerShown: false }} />
-                        <Stack.Screen name="biometric-demo" options={{ headerShown: false }} />
-                        <Stack.Screen name="biometric-app-settings" options={{ headerShown: false }} />
+
+                        <Stack.Screen name="biometric" options={{ headerShown: false }} />
                       </Stack>
                     </ContentWrapper>
                   </BiometricGuard>

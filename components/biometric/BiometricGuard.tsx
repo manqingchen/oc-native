@@ -2,10 +2,10 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
 import { Box, Text, Button, ButtonText } from '@/components/ui';
 import { useBiometricAuth } from '@/hooks/useBiometricAuth';
-import { useBiometricLogin } from '@/hooks/useBiometricLogin';
 import { useBiometricAppLock } from '@/stores/biometricStore';
 import { useTranslation } from 'react-i18next';
 import { LinearGradient } from 'expo-linear-gradient';
+import { showToast } from '@/utils/toast';
 
 interface BiometricGuardProps {
   children: React.ReactNode;
@@ -26,8 +26,7 @@ export const BiometricGuard: React.FC<BiometricGuardProps> = ({ children }) => {
   const [retryCount, setRetryCount] = useState(0);
   const [isAppActive, setIsAppActive] = useState(true);
 
-  const { isSupported, isEnabled, authenticate } = useBiometricAuth();
-  const { tryAutoLogin } = useBiometricLogin();
+  const { isSupported, authenticate } = useBiometricAuth();
   const { isEnabled: isAppLockEnabled, isAuthRequired, isAuthExpired, updateAuthTime, settings } = useBiometricAppLock();
 
   // 如果 i18n 还没有准备好，显示加载状态
@@ -46,9 +45,8 @@ export const BiometricGuard: React.FC<BiometricGuardProps> = ({ children }) => {
         // 应用从后台回到前台
         setIsAppActive(true);
 
-        // 检查是否需要重新认证
-        if (isAppLockEnabled && settings.requireOnBackground &&
-            (isAuthExpired || guardState === 'authenticated')) {
+        // 每次从后台回到前台都需要重新认证（开启应用锁时）
+        if (isAppLockEnabled) {
           setGuardState('checking');
           performBiometricCheck();
         }
@@ -84,45 +82,32 @@ export const BiometricGuard: React.FC<BiometricGuardProps> = ({ children }) => {
         return;
       }
 
-      // 检查是否启用了生物识别
-      if (!isEnabled) {
-        setGuardState('disabled');
-        return;
-      }
 
+
+      // 进入认证流程前，给出触发提示
+      showToast.info(t('biometric.guard.triggered', '正在进行安全验证...'));
       setGuardState('authenticating');
 
-      // 尝试自动登录（包含生物识别验证）
-      const loginResult = await tryAutoLogin();
-      
-      if (loginResult.success) {
+      // 直接进行生物识别验证
+      const authResult = await authenticate(
+        t('biometric.guard.prompt', 'Please authenticate to access the app')
+      );
+
+      if (authResult.success) {
         setGuardState('authenticated');
         setRetryCount(0);
-        // 更新认证时间
         updateAuthTime();
       } else {
-        // 如果自动登录失败，进行单纯的生物识别验证
-        const authResult = await authenticate(
-          t('biometric.guard.prompt', 'Please authenticate to access the app')
-        );
-        
-        if (authResult.success) {
-          setGuardState('authenticated');
-          setRetryCount(0);
-          // 更新认证时间
-          updateAuthTime();
-        } else {
-          setGuardState('failed');
-          setError(authResult.error || t('biometric.error.authFailed', 'Authentication failed'));
-          setRetryCount(prev => prev + 1);
-        }
+        setGuardState('failed');
+        setError(authResult.error || t('biometric.error.authFailed', 'Authentication failed'));
+        setRetryCount(prev => prev + 1);
       }
     } catch (error: any) {
       setGuardState('failed');
       setError(error.message || t('biometric.error.unknown', 'Unknown error occurred'));
       setRetryCount(prev => prev + 1);
     }
-  }, [isAppLockEnabled, isSupported, isEnabled, authenticate, tryAutoLogin, updateAuthTime, t]);
+  }, [isAppLockEnabled, isSupported, authenticate, updateAuthTime, t]);
 
   // 初始检查
   useEffect(() => {
@@ -246,18 +231,7 @@ const BiometricGuardScreen: React.FC<BiometricGuardScreenProps> = ({
               </ButtonText>
             </Button>
 
-            {/* 多次失败后显示跳过选项 */}
-            {retryCount >= 3 && (
-              <Button
-                onPress={onSkip}
-                variant="outline"
-                className="border-gray-300 rounded-xl h-12"
-              >
-                <ButtonText className="text-gray-700 font-medium">
-                  {t('biometric.guard.skip', 'Skip for now')}
-                </ButtonText>
-              </Button>
-            )}
+
           </Box>
         )}
 

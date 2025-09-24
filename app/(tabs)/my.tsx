@@ -88,27 +88,7 @@ export default function My() {
             />
           </Wrapper>
         </Box>
-        <Box className="mt-4">
-          <Text className="mb-2.5">🔐 安全设置</Text>
-          <Wrapper>
-             <Button
-                  onPress={() => router.push('/push-test')}
-                  className="bg-blue-500"
-                >
-                  <ButtonText className="text-white">🔔 推送测试</ButtonText>
-                </Button>
-            <Item
-              title="应用锁定设置"
-              href="/biometric-app-settings"
-              icon={<MyAssetsRightIcon />}
-            />
-            <Item
-              title="生物识别认证演示"
-              href="/biometric-demo"
-              icon={<MyAssetsRightIcon />}
-            />
-          </Wrapper>
-        </Box>
+       
         <Box className="flex items-center mt-5 mb-5">
           <Text className="font-inter text-[15px] leading-[24px] tracking-[0.2px] text-right font-medium text-black">
             Stay Connected

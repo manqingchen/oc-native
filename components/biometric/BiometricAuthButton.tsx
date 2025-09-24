@@ -117,10 +117,9 @@ export const BiometricAuthButton: React.FC<BiometricAuthButtonProps> = ({
       onPress={handleAuthenticate}
       className={`flex-row items-center justify-center ${isDisabled ? 'opacity-50' : ''}`}
     >
-      <ButtonIcon 
-        as={Ionicons} 
+      <ButtonIcon
+        as={Ionicons}
         name={getIcon() as any}
-        size={size === 'sm' ? 16 : size === 'lg' ? 24 : 20}
         className="mr-2"
       />
       {showText && (

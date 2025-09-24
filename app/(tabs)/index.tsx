@@ -83,6 +83,16 @@ export default function Index() {
                 </ButtonText>
                 <ButtonIcon size='md' as={ArrowRightIcon} className="ml-3" />
               </Button>
+              <Button
+                onPress={() => router.push('/biometric')}
+                variant="outline"
+                className={twClassnames(
+                  'h-11 w-[160px] mt-3'
+                )}
+              >
+                <ButtonText>生物识别演示</ButtonText>
+              </Button>
+
               <Pressable onPress={() => { setVideoIndex(0); setOpenVideo(true); }}
                 className={twClassnames("mt-3 h-10 w-[160px] rounded bg-black items-center justify-center")}
               >
